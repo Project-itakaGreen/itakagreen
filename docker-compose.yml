@@ -1,0 +1,70 @@
+# docker-compose.yml
+version: "3.8"
+services:
+  database:
+    image: postgres
+    container_name: local_pgdb
+    restart: always
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./database/local_pgdatabase:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "6081:80"
+    networks:
+      - webnet
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      target: ${NODE_ENV}
+    command: npm run start:dev
+    env_file: ./api/.env
+    volumes:
+      - ./api:/usr/src/app
+      - ./api/node_modules:/usr/src/app/node_modules
+    networks:
+      - webnet
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+  
+  #   api:
+  # hostname: api
+  # build:
+  #   context: ./api
+  #   dockerfile: Dockerfile
+  #   target: development
+  # command: npm run start:dev
+  # env_file: ./api/.env
+  # restart: always
+  # volumes:
+  #   - ./api:/usr/src/api
+  #   - ./api/node_modules:/usr/src/api/node_modules
+  # networks:
+  #   - webnet
+  # ports:
+  #   - 8080:8080
+  # depends_on:
+  #   - database
+
+networks:
+  webnet:
+volumes:
+  pgadmin-data:
