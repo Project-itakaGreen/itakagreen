@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import type { DomainInterface } from './interface/domainInterface';
+import { Domain } from './../domain/entities/domain.entity';
 
 @Injectable()
 export class DomainService {
-  create(createDomainDto: DomainInterface) {
-    return 'This action adds a new domain';
-  }
+  constructor(
+    @InjectRepository(Domain)
+    private readonly domainRepository: Repository<Domain>,
+  ) {}
 
-  findAll() {
-    return `This action returns all domain`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} domain`;
-  }
-
-  update(id: number, updateDomainDto: DomainInterface) {
-    return `This action updates a #${id} domain`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} domain`;
+  async getOrCreate(domainId) {
+    let domain = await this.domainRepository.findOne({
+      where: {
+        id: domainId,
+      },
+    });
+    if (!domain) {
+      domain = new Domain();
+      domain.name = domainId;
+      domain.co2PerBytes = 32; // TODO call the api to get the true value
+      domain = await this.domainRepository.save(domain);
+    }
+    return domain;
   }
 }

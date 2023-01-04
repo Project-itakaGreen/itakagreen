@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { DomainService } from './../domain/domain.service';
 import { Domain } from './../domain/entities/domain.entity';
 import { User } from './../user/entities/user.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
@@ -16,20 +17,13 @@ export class RecordService {
     private readonly domainRepository: Repository<Domain>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly domainService: DomainService,
   ) {}
 
   async create(createRecordDto: CreateRecordDto) {
-    let domain = await this.domainRepository.findOne({
-      where: {
-        name: createRecordDto.domainName,
-      },
-    });
-    if (!domain) {
-      domain = new Domain();
-      domain.name = createRecordDto.domainName;
-      domain.co2PerBytes = 32; // TODO call the api to get the true value
-      domain = await this.domainRepository.save(domain);
-    }
+    const domain = await this.domainService.getOrCreate(
+      createRecordDto.domainName,
+    );
 
     let user = await this.userRepository.findOne({
       where: {
