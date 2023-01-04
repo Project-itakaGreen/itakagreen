@@ -17,5 +17,5 @@ export class Record {
   bytes: number;
 
   @Column()
-  timeIntervale: number;
+  timeInterval: number;
 }
