@@ -9,7 +9,7 @@ export class ConsoController {
 
     @Get()
     hello():string {
-        return 'Bienvenue sur les conso'
+        return 'Bienvenue sur les consos'
     }
 
     @Get('total')
@@ -25,6 +25,6 @@ export class ConsoController {
     @Get('domain')
     getDomain(): string {
         return this.consoService.getDomain();
-      }
+    }
 
 }

@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ConsoModule } from 'src/conso/conso.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -15,7 +17,8 @@ import { AppService } from './app.service';
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
-    }),
+    }), 
+    ConsoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
