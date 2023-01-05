@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { DomainService } from './../domain/domain.service';
-import { Domain } from './../domain/entities/domain.entity';
 import { User } from './../user/entities/user.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { Record } from './entities/record.entity';
@@ -13,8 +12,6 @@ export class RecordService {
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
-    @InjectRepository(Domain)
-    private readonly domainRepository: Repository<Domain>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly domainService: DomainService,
