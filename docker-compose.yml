@@ -17,7 +17,7 @@ services:
     container_name: adminer
     image: adminer
     restart: always
-    ports: 
+    ports:
       - 8081:8080
     volumes:
       - ./database/local_pgdatabase:/var/lib/postgresql/data
@@ -25,12 +25,6 @@ services:
       - database
     networks:
       - webnet
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   api:
     container_name: api
     build:
@@ -48,7 +42,6 @@ services:
       - "8080:8080"
     depends_on:
       - database
-  
   #   api:
   # hostname: api
   # build:
