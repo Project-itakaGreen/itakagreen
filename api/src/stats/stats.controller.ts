@@ -6,10 +6,10 @@ import { StatsService } from './stats.service';
 export class StatsController {
     constructor (private readonly statsService: StatsService){}
 
-    @Get('domain/:number?')
-    getDomain(@Param('number') number: number)
+    @Get('domain')
+    getDomain()
     {
-        return this.statsService.getDomain(number);
+        return this.statsService.getDomain();
     }
 
     @Get('hourStat')

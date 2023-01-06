@@ -14,19 +14,61 @@ export class StatsService {
         private readonly recordRepository: Repository<Record>
     ){}
 
-    async getDomain(nbDomain :number)
+    async getDomain()
     {
-        return `envoi des ${nbDomain} domaines les plus polluants`;
+        let requete = await this.recordRepository
+        .createQueryBuilder("record")
+        .select('domain.name')
+        .addSelect('SUM(record.bytes * domain.co2PerBytes)',"totalCo2")
+        .leftJoin('record.domain', 'domain')
+        .groupBy('domain.name')
+        .orderBy("SUM(record.bytes * domain.co2PerBytes)", "DESC")
+        .limit(2)
+        .getRawMany();
+
+        return requete;
     }
 
     async getDaysStat()
     {
-        return `envoi des jours de la semaine les plus polluants`;
+        let requete = await this.recordRepository
+        .createQueryBuilder('record')
+        .leftJoinAndSelect('record.domain', 'domain')
+        .getMany()
+        
+
+        // partie qui rempli un objet avec les libelles des jours et la somme des consommations
+        var daysInWeek = {};
+
+        var options = { weekday: 'long'} as const;
+
+        requete.forEach(element => {
+            let date = new Date( element.timeIntervale * 1000);
+            let index = `${new Intl.DateTimeFormat('fr-FR', options).format(date)}`;
+            daysInWeek[index] = (daysInWeek[index] == undefined) ? (element.bytes * element.domain.co2PerBytes) :  daysInWeek[index]+(element.bytes * element.domain.co2PerBytes);
+        });
+
+        return daysInWeek;
     }
 
     async getHourStat()
     {
-        return `envoi des heures du jour les plus polluants`;
+        let requete = await this.recordRepository
+        .createQueryBuilder('record')
+        .leftJoinAndSelect('record.domain', 'domain')
+        .getMany()
+        
+
+        // partie qui rempli un objet avec les heures d'une journée et la somme des consommations
+        var hourInDays = {};
+
+        requete.forEach(element => {
+            let date = new Date( element.timeIntervale * 1000);
+            let index = `${('0'+date.getHours()).slice(-2)}`;
+            hourInDays[index] = (hourInDays[index] == undefined) ? (element.bytes * element.domain.co2PerBytes) :  hourInDays[index]+(element.bytes * element.domain.co2PerBytes);
+        });
+
+        return hourInDays;
     }
     
 }
