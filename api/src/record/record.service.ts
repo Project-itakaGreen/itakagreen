@@ -17,17 +17,18 @@ export class RecordService {
     private readonly domainService: DomainService,
   ) {}
 
-  async create(createRecordDto: CreateRecordDto) {
+  async create(createRecordDto: CreateRecordDto, userId: number) {
     const domain = await this.domainService.getOrCreate(
       createRecordDto.domainName,
     );
 
     let user = await this.userRepository.findOne({
       where: {
-        id: createRecordDto.userId,
+        id: userId,
       },
     });
 
+    // TODO use authentification
     if (!user) {
       user = new User();
       user.email = 'test@test.test';
@@ -41,5 +42,12 @@ export class RecordService {
     record.user = user;
 
     return this.recordRepository.save(record);
+  }
+
+  async createMany(createRecordDtos: CreateRecordDto[], userId: number) {
+    const createdRecords = createRecordDtos.map(async (record) => {
+      return await this.create(record, userId);
+    });
+    return await Promise.all(createdRecords);
   }
 }
