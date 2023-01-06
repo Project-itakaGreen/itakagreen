@@ -14,7 +14,7 @@ export class Record {
   user: User;
 
   @Column()
-  bytes: number;
+  gigaOctets: number;
 
   @Column()
   timeInterval: number;
