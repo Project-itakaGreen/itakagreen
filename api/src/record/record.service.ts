@@ -1,22 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
+import { DomainService } from './../domain/domain.service';
+import { User } from './../user/entities/user.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { Record } from './entities/record.entity';
 
 @Injectable()
 export class RecordService {
-  create(createRecordDto: CreateRecordDto) {
-    return 'This action adds a new record';
-  }
+  constructor(
+    @InjectRepository(Record)
+    private readonly recordRepository: Repository<Record>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly domainService: DomainService,
+  ) {}
 
-  findAll() {
-    return `This action returns all record`;
-  }
+  async create(createRecordDto: CreateRecordDto) {
+    const domain = await this.domainService.getOrCreate(
+      createRecordDto.domainName,
+    );
 
-  findOne(id: number) {
-    return `This action returns a #${id} record`;
-  }
+    let user = await this.userRepository.findOne({
+      where: {
+        id: createRecordDto.userId,
+      },
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} record`;
+    if (!user) {
+      user = new User();
+      user.email = 'test@test.test';
+      user = await this.userRepository.save(user);
+    }
+
+    const record = new Record();
+    record.domain = domain;
+    record.bytes = createRecordDto.bytes;
+    record.timeInterval = createRecordDto.timeInterval;
+    record.user = user;
+
+    return this.recordRepository.save(record);
   }
 }

@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
+import { DomainModule } from './../domain/domain.module';
+import { RecordModule } from './../record/record.module';
+import { UserModule } from './../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -14,10 +18,15 @@ import { AppService } from './app.service';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: true, // TODO remove this line in production
     }),
+    RecordModule,
+    DomainModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private DataSouce: DataSource) {}
+}
