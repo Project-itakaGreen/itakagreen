@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 
 import { CreateRecordDto } from './dto/create-record.dto';
 import { RecordService } from './record.service';
@@ -7,8 +7,19 @@ import { RecordService } from './record.service';
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
-  @Post()
-  create(@Body() createRecordDto: CreateRecordDto) {
-    return this.recordService.create(createRecordDto);
+  @Post('single/:userId')
+  create(
+    @Body() createRecordDto: CreateRecordDto,
+    @Param('userId') userId: number,
+  ) {
+    return this.recordService.create(createRecordDto, userId);
+  }
+
+  @Post('many/:userId')
+  createMany(
+    @Body() createRecordDto: CreateRecordDto[],
+    @Param('userId') userId: number,
+  ) {
+    return this.recordService.createMany(createRecordDto, userId);
   }
 }
