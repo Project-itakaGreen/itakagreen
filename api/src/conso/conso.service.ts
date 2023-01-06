@@ -22,10 +22,10 @@ export class ConsoService {
         let total = await this.recordRepository
         .createQueryBuilder("record")
         .select('record.userId')
-        .addSelect('SUM(record.bytes * domain.co2PerBytes)',"totalCo2")
+        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"totalCo2")
         .leftJoin('record.domain', 'domain')
         .where('record.userId = :userId', {userId: idUser})
-        .andWhere('record.timeIntervale > :parameter', {parameter: timestamp})
+        .andWhere('record.timeInterval > :parameter', {parameter: timestamp})
         .groupBy('record.userId')
         .getRawOne();
 
@@ -42,8 +42,8 @@ export class ConsoService {
         .createQueryBuilder('record')
         .leftJoinAndSelect('record.domain', 'domain')
         .where('record.userId = :userId', {userId: idUser})
-        .andWhere('record.timeIntervale > :oneWeek', {oneWeek: interval})
-        .orderBy('record.timeIntervale')
+        .andWhere('record.timeInterval > :oneWeek', {oneWeek: interval})
+        .orderBy('record.timeInterval')
         .getMany()
         
 
@@ -51,9 +51,9 @@ export class ConsoService {
         var lastWeek = {};
 
         requete.forEach(element => {
-            let date = new Date( element.timeIntervale * 1000);
+            let date = new Date( element.timeInterval * 1000);
             let index = `${('0'+date.getDate()).slice(-2)}/${('0'+date.getMonth()+1).slice(-2)}/${date.getFullYear()}`;
-            lastWeek[index] = (lastWeek[index] == undefined) ? (element.bytes * element.domain.co2PerBytes) :  lastWeek[index]+(element.bytes * element.domain.co2PerBytes);
+            lastWeek[index] = (lastWeek[index] == undefined) ? (element.gigaOctets * element.domain.co2PerGO) :  lastWeek[index]+(element.gigaOctets * element.domain.co2PerGO);
         });
 
         return lastWeek;
@@ -69,10 +69,10 @@ export class ConsoService {
         let requete = await this.recordRepository
         .createQueryBuilder("record")
         .select('domain.name')
-        .addSelect('SUM(record.bytes * domain.co2PerBytes)',"totalCo2")
+        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"totalCo2")
         .leftJoin('record.domain', 'domain')
         .where('record.userId = :userId', {userId: idUser})
-        .andWhere('record.timeIntervale > :parameter', {parameter: timestamp})
+        .andWhere('record.timeInterval > :parameter', {parameter: timestamp})
         .groupBy('domain.name')
         .getRawMany();
 

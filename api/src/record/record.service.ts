@@ -36,7 +36,7 @@ export class RecordService {
 
     const record = new Record();
     record.domain = domain;
-    record.bytes = createRecordDto.bytes;
+    record.gigaOctets = createRecordDto.gigaOctets;
     record.timeInterval = createRecordDto.timeInterval;
     record.user = user;
 
