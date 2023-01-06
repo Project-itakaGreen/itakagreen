@@ -14,7 +14,7 @@ export class StatsService {
         private readonly recordRepository: Repository<Record>
     ){}
 
-    async getDomain()
+    async getDomain(number: number)
     {
         let requete = await this.recordRepository
         .createQueryBuilder("record")
@@ -23,13 +23,13 @@ export class StatsService {
         .leftJoin('record.domain', 'domain')
         .groupBy('domain.name')
         .orderBy("SUM(record.bytes * domain.co2PerBytes)", "DESC")
-        .limit(2)
+        .limit(number)
         .getRawMany();
 
         return requete;
     }
 
-    async getDaysStat()
+    async getWeekStat()
     {
         let requete = await this.recordRepository
         .createQueryBuilder('record')
@@ -44,7 +44,7 @@ export class StatsService {
 
         requete.forEach(element => {
             let date = new Date( element.timeIntervale * 1000);
-            let index = `${new Intl.DateTimeFormat('fr-FR', options).format(date)}`;
+            let index = `${new Intl.DateTimeFormat('en-US', options).format(date)}`;
             daysInWeek[index] = (daysInWeek[index] == undefined) ? (element.bytes * element.domain.co2PerBytes) :  daysInWeek[index]+(element.bytes * element.domain.co2PerBytes);
         });
 

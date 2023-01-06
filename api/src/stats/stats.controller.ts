@@ -2,14 +2,16 @@ import { Controller, Get, Param } from '@nestjs/common';
 
 import { StatsService } from './stats.service';
 
+const DEFAULT_NUMBER_DOMAIN = 5;
+
 @Controller('stats')
 export class StatsController {
     constructor (private readonly statsService: StatsService){}
 
-    @Get('domain')
-    getDomain()
+    @Get('domain/:number?')
+    getDomain( @Param('number') number: number)
     {
-        return this.statsService.getDomain();
+        return this.statsService.getDomain(number??DEFAULT_NUMBER_DOMAIN);
     }
 
     @Get('hourStat')
@@ -18,9 +20,9 @@ export class StatsController {
         return this.statsService.getHourStat();
     }
 
-    @Get('daysStat')
-    getDaysStat()
+    @Get('weekStat')
+    getWeekStat()
     {
-        return this.statsService.getDaysStat();
+        return this.statsService.getWeekStat();
     }
 }   
