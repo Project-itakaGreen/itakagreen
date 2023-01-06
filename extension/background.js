@@ -4,16 +4,6 @@ let activeSiteData = null;
 // init the last origin url
 let lastOriginUrl = "";
 
-let db;
-const DBOpenRequest = indexedDB.open("records", 9);
-DBOpenRequest.onerror = function (event) {
-  console.error("error opening db");
-};
-DBOpenRequest.onupgradeneeded = setupDB;
-DBOpenRequest.onsuccess = function (event) {
-  db = event.target.result;
-  watchRequests();
-};
 
 
 // check if the extension is installed or updated
@@ -50,6 +40,20 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
 });
+
+let db;
+const DBOpenRequest = indexedDB.open("records", 9);
+DBOpenRequest.onerror = function (event) {
+  console.error("error opening db");
+};
+
+DBOpenRequest.onupgradeneeded = setupDB;
+DBOpenRequest.onsuccess = function (event) {
+  db = event.target.result;
+  watchRequests();
+};
+
+
 /**
  * Watch the requests to log the responses size
  */
@@ -126,7 +130,6 @@ function updateRecord(objectStore, record, size) {
  */
 function setupDB(event) {
   const db = event.target.result;
-  db.deleteObjectStore("records");
   const objectStore = db.createObjectStore("records", { keyPath: "id", autoIncrement: true });
   objectStore.createIndex("key", ["domain", "interval"], { unique: true });
   objectStore.createIndex("domain", "domain", { unique: false });
