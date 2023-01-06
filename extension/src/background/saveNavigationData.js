@@ -1,58 +1,19 @@
 "use strict";
-// init the data of api for the active tab  
-let activeSiteData = null;
-// init the last origin url
-let lastOriginUrl = "";
-
-
-
-// check if the extension is installed or updated
-chrome.runtime.onInstalled.addListener(function () {
-  console.log("Extension has been installed");
-});
-
-// get the origin of the url
-function getOrigineFromUrl(url) {
-  if (url.indexOf("chrome://") != 0 && url.length != 0) {
-    const parsedUrl = new URL(url);
-    return parsedUrl.origin ;
-  }
-}
-
-//verify if the url is the same as the last one
-function getDomainData(originUrl) {
-  if (originUrl != lastOriginUrl && originUrl != undefined) {
-    lastOriginUrl = originUrl;
-    // TODO: call api
-    console.log("call api with :" + originUrl);
-    return {};//object with the data of api
-  }
-}
-
-// get the url of the active tab
-chrome.tabs.onActivated.addListener(function (activeInfo) {
-  chrome.tabs.get(activeInfo.tabId, function (tab) {
-    const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
-  });
- });
-
-//  get the url of loaded tab 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
-});
 
 let db;
-const DBOpenRequest = indexedDB.open("records", 9);
-DBOpenRequest.onerror = function (event) {
-  console.error("error opening db");
-};
 
-DBOpenRequest.onupgradeneeded = setupDB;
-DBOpenRequest.onsuccess = function (event) {
-  db = event.target.result;
-  watchRequests();
-};
-
+export function saveNavigationData(){
+	const DBOpenRequest = indexedDB.open("records", 9);
+	DBOpenRequest.onerror = function (event) {
+	  console.error("error opening db");
+	};
+	
+	DBOpenRequest.onupgradeneeded = setupDB;
+	DBOpenRequest.onsuccess = function (event) {
+	  db = event.target.result;
+	  watchRequests();
+	};
+}
 
 /**
  * Watch the requests to log the responses size
@@ -72,7 +33,6 @@ function watchRequests(){
     ["responseHeaders"]
   );
 }
-
 
 /**
  * The size of the response will be added to the domain usage in the current interval
