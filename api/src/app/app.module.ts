@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { StatsModule } from 'src/stats/stats.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -16,6 +18,7 @@ import { AppService } from './app.service';
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
