@@ -13,20 +13,18 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./database/local_pgdatabase:/var/lib/postgresql/data
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
+  adminer:
+    container_name: adminer
+    image: adminer
     restart: always
     ports:
-      - "6081:80"
+      - 8081:8080
+    volumes:
+      - ./database/local_pgdatabase:/var/lib/postgresql/data
+    depends_on:
+      - database
     networks:
       - webnet
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   api:
     container_name: api
     build:
@@ -40,11 +38,41 @@ services:
       - ./api/node_modules:/usr/src/app/node_modules
     networks:
       - webnet
+      - app-network
     ports:
       - "8080:8080"
     depends_on:
       - database
-  
+  front-dev:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./front:/opt/app
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+
+  front-prod:
+    container_name: nextjs-prod
+    build:
+      target: production
+      context: ./front
+      dockerfile: Dockerfile.prod
+    restart: on-failure
+    volumes:
+      - ./front:/opt/app
+      - /opt/app/node_modules
+      - /opt/app/.next
+    ports:
+      - '8000:8000'
+    networks:
+      - app-network
+
   #   api:
   # hostname: api
   # build:
@@ -64,7 +92,9 @@ services:
   # depends_on:
   #   - database
 
+
 networks:
   webnet:
+  app-network:
 volumes:
   pgadmin-data:

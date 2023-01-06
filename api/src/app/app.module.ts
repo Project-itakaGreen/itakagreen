@@ -3,7 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ConsoModule } from 'src/conso/conso.module';
-
+import { DomainModule } from './../domain/domain.module';
+import { RecordModule } from './../record/record.module';
+import { UserModule } from './../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -28,6 +30,9 @@ import { AppService } from './app.service';
       inject: [ConfigService],
     }),
     ConsoModule,
+    RecordModule,
+    DomainModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
