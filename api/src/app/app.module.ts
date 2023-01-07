@@ -7,6 +7,8 @@ import { RecordModule } from './../record/record.module';
 import { UserModule } from './../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from 'src/auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AppService } from './app.service';
     RecordModule,
     DomainModule,
     UserModule,
+    AuthModule,
+    PassportModule.register({ session: true })
   ],
   controllers: [AppController],
   providers: [AppService],

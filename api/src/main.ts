@@ -2,6 +2,10 @@ import { NestFactory } from '@nestjs/core';
 
 import * as dotenv from 'dotenv';
 
+import * as session from 'express-session';
+
+import * as passport from 'passport';
+
 import { AppModule } from './app/app.module';
 
 import { LoggerService } from '@nestjs/common';
@@ -14,8 +18,17 @@ async function bootstrap() {
     logger: new LoggerFile(),
   });
 
-  console.log(process.env.PORT);
-  
+  app.setGlobalPrefix(process.env.GLOBAL_PREFIX);
+  app.use(session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+      maxAge: 60000,
+    }
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
   await app.listen(process.env.PORT);
 }
 

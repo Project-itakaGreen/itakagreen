@@ -14,4 +14,9 @@ export class User {
     nullable: true,
   })
   password?: string;
+
+  @Column({
+    nullable: true,
+  })
+  googleId?: string;
 }
