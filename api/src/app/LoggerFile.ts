@@ -47,9 +47,9 @@ export class LoggerFile implements LoggerService
 
     const dateObject = this.getDateObjet();
   console.log(
-    `${coloursTxt.fg.green}[LOG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.green} ${message}`,
+    `${coloursTxt.fg.green}[LOG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.green} ${message}${coloursTxt.fg.white}`,
   );
-    this.fsToFile('LOG',message,optionalParams);
+    this.fsToFile('LOG',dateObject, message,optionalParams);
 
   }
 
@@ -60,9 +60,9 @@ export class LoggerFile implements LoggerService
   error(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
     console.error(
-      `${coloursTxt.fg.red}[ERROR] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.red} ${message}`,
+      `${coloursTxt.fg.red}[ERROR] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.red} ${message}${coloursTxt.fg.white}`,
     );
-    this.fsToFile('ERROR',message,optionalParams);
+    this.fsToFile('ERROR',dateObject, message,optionalParams);
 
   }
 
@@ -73,9 +73,9 @@ export class LoggerFile implements LoggerService
   warn(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
     console.warn(
-      `${coloursTxt.fg.yellow}[WARN] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}`,
+      `${coloursTxt.fg.yellow}[WARN] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
     );
-    this.fsToFile('WARN',message,optionalParams);
+    this.fsToFile('WARN',dateObject, message,optionalParams);
 
   }
 
@@ -86,9 +86,9 @@ export class LoggerFile implements LoggerService
   debug?(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
     console.debug(
-      `${coloursTxt.fg.yellow}[DEBUG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}`,
+      `${coloursTxt.fg.yellow}[DEBUG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
     );
-    this.fsToFile('DEBUG',message,optionalParams);
+    this.fsToFile('DEBUG',dateObject, message,optionalParams);
 
   }
 
@@ -99,7 +99,7 @@ export class LoggerFile implements LoggerService
   verbose?(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
     console.debug(
-      `${coloursTxt.fg.yellow}[VERBOSE] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}`,
+      `${coloursTxt.fg.yellow}[VERBOSE] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
     );
     this.fsToFile('VERBOSE',message,optionalParams);
 
@@ -111,7 +111,7 @@ export class LoggerFile implements LoggerService
   * du LoggerService afin d'écrire dans le message dans un fichier texte
   */
 
-  fsToFile(dateObject: any, type: any, message: any, ...optionalParams: any[])
+  fsToFile(type: any, dateObject: any, message: any, ...optionalParams: any[])
   {
     const fs = require('fs');
 
