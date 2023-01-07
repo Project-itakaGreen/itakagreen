@@ -6,6 +6,9 @@ import { ConsoModule } from 'src/conso/conso.module';
 import { DomainModule } from './../domain/domain.module';
 import { RecordModule } from './../record/record.module';
 import { UserModule } from './../user/user.module';
+
+import { StatsModule } from 'src/stats/stats.module';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -33,6 +36,7 @@ import { AppService } from './app.service';
     RecordModule,
     DomainModule,
     UserModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
