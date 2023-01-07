@@ -34,13 +34,14 @@ import { PassportModule } from '@nestjs/passport';
       }),
       inject: [ConfigService],
     }),
+    PassportModule.register({ session: true }),
+    AuthModule,
+    
     ConsoModule,
     RecordModule,
     DomainModule,
     UserModule,
-    AuthModule,
-    PassportModule.register({ session: true })
-    StatsModule,
+    StatsModule
   ],
   controllers: [AppController],
   providers: [AppService],

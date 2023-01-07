@@ -22,7 +22,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
   app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: config.get('SESSION_SECRET'),
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -35,7 +35,7 @@ async function bootstrap() {
   const PORT: number = config.get('PORT') || 8080
   
   await app.listen(PORT, () => {
-    logger.log(`Listening at http://localhost:${PORT}`);
+    logger.log(`Listening at http://localhost:${PORT}/${config.get('GLOBAL_PREFIX')}`);
     logger.log(`Running in ${config.get('NODE_ENV')} mode`);
   });
 
