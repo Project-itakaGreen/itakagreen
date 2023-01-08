@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Domain {
@@ -8,6 +8,9 @@ export class Domain {
   @Column()
   name: string;
 
-  @Column()
-  co2PerBytes: number;
+  @Column('double precision')
+  co2PerGO: number;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

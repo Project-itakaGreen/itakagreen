@@ -13,20 +13,18 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./database/local_pgdatabase:/var/lib/postgresql/data
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
+  adminer:
+    container_name: adminer
+    image: adminer
     restart: always
     ports:
-      - "6081:80"
+      - 8081:8080
+    volumes:
+      - ./database/local_pgdatabase:/var/lib/postgresql/data
+    depends_on:
+      - database
     networks:
       - webnet
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   api:
     container_name: api
     build:
@@ -45,7 +43,6 @@ services:
       - "8080:8080"
     depends_on:
       - database
-  
   front-dev:
     build:
       context: ./front

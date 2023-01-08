@@ -1,6 +1,5 @@
 export class CreateRecordDto {
-  userId: number;
-  domainName: number;
-  bytes: number;
-  timeIntervale: number;
+  domainName: string;
+  gigaOctets: number;
+  timeInterval: number;
 }
