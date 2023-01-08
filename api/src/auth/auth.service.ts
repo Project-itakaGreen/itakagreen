@@ -7,9 +7,9 @@ import { Repository } from "typeorm";
 @Injectable()
 export class AuthService {
   private readonly logger: Logger = new Logger(AuthService.name);
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {
-
-  }
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>
+  ){}
   // Look for the user in db if does not exist create user 
   // @param UserDetail type for google user login to not interfere with user Dto type
   async validateUser(details: UserGoogleDetails) {
