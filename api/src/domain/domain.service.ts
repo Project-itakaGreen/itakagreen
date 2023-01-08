@@ -11,7 +11,7 @@ import type { AxiosError } from 'axios';
 
 @Injectable()
 export class DomainService {
-  private logger = new Logger(DomainService.name);
+  private readonly logger: Logger = new Logger(DomainService.name);
   constructor(
     @InjectRepository(Domain)
     private readonly domainRepository: Repository<Domain>,

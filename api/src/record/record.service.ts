@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -9,6 +9,8 @@ import { Record } from './entities/record.entity';
 
 @Injectable()
 export class RecordService {
+  private readonly logger: Logger = new Logger(RecordService.name);
+
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
