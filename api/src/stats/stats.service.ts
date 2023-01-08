@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -8,6 +8,7 @@ import { Record } from 'src/record/entities/record.entity';
 
 @Injectable()
 export class StatsService {
+    private readonly logger: Logger = new Logger(StatsService.name);
 
     constructor (
         @InjectRepository(Record)

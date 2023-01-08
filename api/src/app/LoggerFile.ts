@@ -1,5 +1,5 @@
 
-import { Logger, LoggerService } from '@nestjs/common';
+import { LoggerService } from '@nestjs/common';
 
 
 
@@ -46,10 +46,9 @@ export class LoggerFile implements LoggerService
   log(message: any, ...optionalParams: any[]) {
 
     const dateObject = this.getDateObjet();
-  console.log(
-    `${coloursTxt.fg.green}[LOG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.green} ${message}${coloursTxt.fg.white}`,
-  );
-    this.fsToFile('LOG',dateObject, message,optionalParams);
+    let logString: LogStringObject = this.getLogString('LOG',dateObject, message,optionalParams)
+    console.log(logString.colored)
+    this.fsToFile(logString.clean,dateObject);
 
   }
 
@@ -59,10 +58,9 @@ export class LoggerFile implements LoggerService
 
   error(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
-    console.error(
-      `${coloursTxt.fg.red}[ERROR] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.red} ${message}${coloursTxt.fg.white}`,
-    );
-    this.fsToFile('ERROR',dateObject, message,optionalParams);
+    let logString: LogStringObject = this.getLogString('ERROR',dateObject, message,optionalParams)
+    console.error(logString.colored)
+    this.fsToFile(logString.clean,dateObject);
 
   }
 
@@ -72,11 +70,9 @@ export class LoggerFile implements LoggerService
 
   warn(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
-    console.warn(
-      `${coloursTxt.fg.yellow}[WARN] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
-    );
-    this.fsToFile('WARN',dateObject, message,optionalParams);
-
+    let logString: LogStringObject = this.getLogString('WARN',dateObject, message,optionalParams)
+    console.warn(logString.colored)
+    this.fsToFile(logString.clean,dateObject);
   }
 
   /**
@@ -85,10 +81,9 @@ export class LoggerFile implements LoggerService
 
   debug?(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
-    console.debug(
-      `${coloursTxt.fg.yellow}[DEBUG] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
-    );
-    this.fsToFile('DEBUG',dateObject, message,optionalParams);
+    let logString: LogStringObject = this.getLogString('DEBUG',dateObject, message,optionalParams)
+    console.debug(logString.colored)
+    this.fsToFile(logString.clean,dateObject);
 
   }
 
@@ -98,10 +93,9 @@ export class LoggerFile implements LoggerService
 
   verbose?(message: any, ...optionalParams: any[]) {
     const dateObject = this.getDateObjet();
-    console.debug(
-      `${coloursTxt.fg.yellow}[VERBOSE] ${coloursTxt.fg.blue}${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds} ${coloursTxt.fg.yellow}[${optionalParams}]${coloursTxt.fg.yellow} ${message}${coloursTxt.fg.white}`,
-    );
-    this.fsToFile('VERBOSE',message,optionalParams);
+    let logString: LogStringObject = this.getLogString('VERBOSE',dateObject, message,optionalParams)
+    console.debug(logString.colored)
+    this.fsToFile(logString.clean,dateObject);
 
   }
 
@@ -111,7 +105,7 @@ export class LoggerFile implements LoggerService
   * du LoggerService afin d'écrire dans le message dans un fichier texte
   */
 
-  fsToFile(type: any, dateObject: any, message: any, ...optionalParams: any[])
+  fsToFile(logString: string, dateObject: DateObjectDto)
   {
     const fs = require('fs');
 
@@ -127,24 +121,39 @@ export class LoggerFile implements LoggerService
 
     // ecriture du log dans le fichier txt
     let log = fs.createWriteStream(myFile,{ flags: 'a'});
-    log.write(`[${type}] ${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds}  [${optionalParams}]  ${message}\n`);
+    log.write(logString+"\n");
     log.end();
   }
 
-  getDateObjet()
+  getLogString(type: string, dateObject: DateObjectDto,message: string, ...optionalParams: any[]): LogStringObject {
+    let logDateString = `${dateObject.day}-${dateObject.month}-${dateObject.year} ${dateObject.hours}:${dateObject.minutes}:${dateObject.seconds}`
+
+    let typeColor = "";
+    switch (type) {
+      case "LOG":
+        typeColor=coloursTxt.fg.green
+        break;
+      case "ERROR":
+        typeColor=coloursTxt.fg.red
+        break;
+      default:
+        typeColor=coloursTxt.fg.yellow
+        break;
+    }
+    return {
+      colored: `${typeColor}[${type}] ${coloursTxt.fg.blue}${logDateString} ${coloursTxt.fg.yellow}[${optionalParams}] ${typeColor}${message}${coloursTxt.reset}`,
+      clean: `[${type}] ${logDateString} [${optionalParams}] ${message}`
+    }
+  }
+
+  getDateObjet(): DateObjectDto
   {
     let date = new Date();
-
     let day = ('0'+date.getDate()).slice(-2);
-
     let month = ('0'+date.getMonth()+1).slice(-2);
-
     let year = date.getFullYear();
-
     let hours = ('0'+date.getHours()).slice(-2);
-
     let minutes = ('0'+date.getMinutes()).slice(-2);
-
     let seconds = ('0'+date.getSeconds()).slice(-2);
 
     return {
