@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'src/auth/auth.module';
 import { ConsoModule } from 'src/conso/conso.module';
+import { StatsModule } from 'src/stats/stats.module';
+import { DataSource } from 'typeorm';
+
 import { DomainModule } from './../domain/domain.module';
 import { RecordModule } from './../record/record.module';
 import { UserModule } from './../user/user.module';
-
-import { StatsModule } from 'src/stats/stats.module';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from 'src/auth/auth.module';
-import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -23,7 +22,7 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        type: "postgres",
+        type: 'postgres',
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USER'),
@@ -36,12 +35,11 @@ import { PassportModule } from '@nestjs/passport';
     }),
     PassportModule.register({ session: true }),
     AuthModule,
-    
     ConsoModule,
     RecordModule,
     DomainModule,
     UserModule,
-    StatsModule
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

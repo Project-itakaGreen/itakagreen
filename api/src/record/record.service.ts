@@ -39,7 +39,7 @@ export class RecordService {
 
     const record = new Record();
     record.domain = domain;
-    record.gigaOctets = createRecordDto.gigaOctets;
+    record.bytes = createRecordDto.bytes;
     record.timeInterval = createRecordDto.timeInterval;
     record.user = user;
 
@@ -47,9 +47,11 @@ export class RecordService {
   }
 
   async createMany(createRecordDtos: CreateRecordDto[], userId: number) {
+    console.log('createMany');
+    console.log(createRecordDtos);
     const createdRecords = createRecordDtos.map(async (record) => {
       return await this.create(record, userId);
     });
-    return await Promise.all(createdRecords);
+    return await Promise.allSettled(createdRecords);
   }
 }

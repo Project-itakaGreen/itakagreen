@@ -1,5 +1,5 @@
 export class CreateRecordDto {
   domainName: string;
-  gigaOctets: number;
+  bytes: number;
   timeInterval: number;
 }

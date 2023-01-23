@@ -41,13 +41,13 @@ export class DomainService {
           ? apiResponse.statistics.co2.renewable.grams
           : apiResponse.statistics.co2.grid.grams;
 
-      const bytesToGO = 8000000000;
+      const bytesToGO = 1_073_741_824;
       gco2ByGO = (co2PerBaseCalculeBytes / baseCalculeBytes) * bytesToGO;
     } catch (error) {
       this.logger.warn(
         `error in fetching the consomation for the domain : "${domainName}"`,
       );
-      gco2ByGO = 49.4; // TODO find a good source for this number
+      gco2ByGO = 0.81 * 442; // https://sustainablewebdesign.org/calculating-digital-emissions/
     }
 
     const newDomain = new Domain();
