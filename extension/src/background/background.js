@@ -1,8 +1,13 @@
 "use strict";
+import { dbConnection } from './dbConnection';
 import { loadPopup } from './popup';
 import { saveNavigationData } from './saveNavigationData';
+import { loadStatsSender } from './statsSender';
 
 
-loadPopup();
-saveNavigationData();
-
+(async () => {
+	loadPopup();
+	const db = await dbConnection();
+	saveNavigationData(db);
+	loadStatsSender(db);
+})()
