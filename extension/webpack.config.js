@@ -1,7 +1,12 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const dotenv = require('dotenv');
+dotenv.config();
 
-module.exports = {
+module.exports = () => {
+  console.log( `build as ${process.env.NODE_ENV} mode`)
+  return {
+  mode: process.env.NODE_ENV || 'development',
   devtool: "source-map",
   entry: {
     background: './src/background/background.js',
@@ -13,22 +18,11 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [{
-          from: './src/images',
-          to: './images',
-        },
-        {
-          from: './src/manifest.json',
-          to: './manifest.json',
-        },
-        {
-          from: './src/popup.html',
-          to: './popup.html',
-        },
-        {
-          from: './src/popup.css',
-          to: './popup.css',
-        }
+        from: './public',
+        to: './',
+      },
       ],
     })
   ]
 };
+}
