@@ -1,6 +1,4 @@
-import { randomInt } from "crypto";
 import CardGraph from "../components/shared/CardGraph";
-import DomainDTO from "../interfaces/domainDTO";
 
 export default function Search() {
   const data = [
@@ -15,7 +13,7 @@ export default function Search() {
   const chartData = data.map((e) => e.co2);
   const arrayType = ['bar','doughnut','pie','line','polarArea','radar'];
   const type=arrayType[Math.floor(Math.random()*arrayType.length)]; // bar doughnut pie line polarArea radar
-  
+
   return (
     <>
       <h1>Super graph - Not for sale</h1>
