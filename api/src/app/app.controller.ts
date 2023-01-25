@@ -12,11 +12,11 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-   // route des logs
-   // TODO secure logs from user 
-   @UseGuards(JwtAuthGuard)
-   @Get('logs')
-   getLogs(): string {
-     return this.appService.getLogs();
-   }
+  // route des logs
+  // TODO secure logs from user
+  @UseGuards(JwtAuthGuard)
+  @Get('logs')
+  getLogs(): string {
+    return this.appService.getLogs();
+  }
 }

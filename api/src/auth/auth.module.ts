@@ -12,25 +12,23 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      User,
-    ]),
+    TypeOrmModule.forFeature([User]),
     PassportModule,
     JwtModule.registerAsync({
-      imports:[ConfigModule],
+      imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         secret: config.get('JWT_SECRET'),
-        signOptions: {expiresIn: config.get('JWT_TOKEN_EXPIRES')}
+        signOptions: { expiresIn: config.get('JWT_TOKEN_EXPIRES') },
       }),
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
   providers: [
-    GoogleStrategy, 
+    GoogleStrategy,
     SessionSerializer,
     {
-      provide: "AUTH_SERVICE",
+      provide: 'AUTH_SERVICE',
       useClass: AuthService,
     },
     JwtStrategy,
