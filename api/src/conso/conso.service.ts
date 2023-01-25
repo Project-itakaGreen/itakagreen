@@ -49,14 +49,20 @@ export class ConsoService {
         
 
         // partie qui rempli un objet avec la date et la somme des consommations
-        var lastWeek = {};
+        let lastWeek = {};
 
         requete.forEach(element => {
             let date = new Date( element.timeInterval * 1000);
             let index = `${('0'+date.getDate()).slice(-2)}/${('0'+date.getMonth()+1).slice(-2)}/${date.getFullYear()}`;
             lastWeek[index] = (lastWeek[index] == undefined) ? (element.gigaOctets * element.domain.co2PerGO) :  lastWeek[index]+(element.gigaOctets * element.domain.co2PerGO);
         });
-
+        
+        lastWeek = Object.entries(lastWeek).map((e)=>{
+            return {
+                "date": e[0],
+                "co2": e[1]
+            }
+        })
         return lastWeek;
 
     }
@@ -69,8 +75,8 @@ export class ConsoService {
 
         let requete = await this.recordRepository
         .createQueryBuilder("record")
-        .select('domain.name')
-        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"totalCo2")
+        .select('domain.name', "domain")
+        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"co2")
         .leftJoin('record.domain', 'domain')
         .where('record.userId = :userId', {userId: idUser})
         .andWhere('record.timeInterval > :parameter', {parameter: timestamp})

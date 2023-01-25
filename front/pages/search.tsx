@@ -1,22 +1,23 @@
 import CardGraph from "../components/shared/CardGraph";
 import DomainDTO from "../interfaces/domainDTO";
 
+export default function Search() {
+  const data = [
+    { date: "19/01/2023", co2: 15 },
+    { date: "20/01/2023", co2: 35 },
+    { date: "21/01/2023", co2: 10 },
+    { date: "23/01/2023", co2: 89 },
+    { date: "24/01/2023", co2: 6 },
+    { date: "25/01/2023", co2: 173 },
+  ];
+  const chartLabel = data.map((e) => e.date);
+  const chartData = data.map((e) => e.co2);
+  const type='doughnut'; // bar doughnut pie line polarArea radar
+  return (
+    <>
+      <h1>Super graph - Not for sale</h1>
 
-export default function Search()
-{
-    const data= {
-        "google": 45,
-        "youtube": 34,
-        "monSite": 12
-    };
-    return(
-        <>
-            <p>
-                ggfrefd
-            </p>
-
-            <CardGraph chartData={data}/>
-
-        </>
-    )
+      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type}/>
+    </>
+  );
 }

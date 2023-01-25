@@ -19,8 +19,8 @@ export class StatsService {
     {
         let requete = await this.recordRepository
         .createQueryBuilder("record")
-        .select('domain.name')
-        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"totalCo2")
+        .select('domain.name','domain')
+        .addSelect('SUM(record.gigaOctets * domain.co2PerGO)',"co2")
         .leftJoin('record.domain', 'domain')
         .groupBy('domain.name')
         .orderBy("SUM(record.gigaOctets * domain.co2PerGO)", "DESC")
@@ -49,6 +49,13 @@ export class StatsService {
             daysInWeek[index] = (daysInWeek[index] == undefined) ? (element.gigaOctets * element.domain.co2PerGO) :  daysInWeek[index]+(element.gigaOctets * element.domain.co2PerGO);
         });
 
+        daysInWeek = Object.entries(daysInWeek).map((e)=>{
+            return {
+                "day": e[0],
+                "co2": e[1]
+            }
+        })
+
         return daysInWeek;
     }
 
@@ -68,6 +75,13 @@ export class StatsService {
             let index = `${('0'+date.getHours()).slice(-2)}`;
             hourInDays[index] = (hourInDays[index] == undefined) ? (element.gigaOctets * element.domain.co2PerGO) :  hourInDays[index]+(element.gigaOctets * element.domain.co2PerGO);
         });
+
+        hourInDays = Object.entries(hourInDays).map((e)=>{
+            return {
+                "hour": e[0],
+                "co2": e[1]
+            }
+        })
 
         return hourInDays;
     }
