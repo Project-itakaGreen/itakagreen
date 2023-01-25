@@ -9,7 +9,6 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-
   getHello(): string {
     return this.appService.getHello();
   }

@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/entities/user.entity";
@@ -10,7 +11,8 @@ export class AuthService {
   private readonly logger: Logger = new Logger(AuthService.name);
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private readonly  config: ConfigService,
   ){}
   // Look for the user in db if does not exist create user 
   // @param UserDetail type for google user login to not interfere with user Dto type
@@ -46,11 +48,13 @@ export class AuthService {
 
     return user;
   }
-
+  // logic to create token object
   async login(user: any) {
     const payload = { mail: user.email , sub: user.id };
+    console.log(payload);
     return {
       access_token: this.jwtService.sign(payload),
+      token_expire: this.config.get('JWT_TOKEN_EXPIRES'),
     };
   }
 }

@@ -7,8 +7,8 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
-  @Post('single/:userId')
   @UseGuards(JwtAuthGuard)
+  @Post('single/:userId')
   create(
     @Body() createRecordDto: CreateRecordDto,
     @Param('userId') userId: number,
@@ -16,8 +16,8 @@ export class RecordController {
     return this.recordService.create(createRecordDto, userId);
   }
 
-  @Post('many/:userId')
   @UseGuards(JwtAuthGuard)
+  @Post('many/:userId')
   createMany(
     @Body() createRecordDto: CreateRecordDto[],
     @Param('userId') userId: number,
