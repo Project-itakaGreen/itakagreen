@@ -7,7 +7,7 @@ const DEFAULT_NUMBER_DOMAIN = 5;
 @Controller('stats')
 export class StatsController {
     constructor (private readonly statsService: StatsService){}
-
+    
     @Get('domain/:number?')
     getDomain( @Param('number') number: number)
     {
