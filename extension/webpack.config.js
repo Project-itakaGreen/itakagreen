@@ -10,6 +10,7 @@ module.exports = () => {
   devtool: "source-map",
   entry: {
     background: './src/background/background.js',
+    popup: './src/popup/popup.js',
   },
   output: {
     filename: '[name].js',

@@ -9,8 +9,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Record } from 'src/record/entities/record.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Record])],
-    controllers: [StatsController],
-    providers: [StatsService],
+  imports: [TypeOrmModule.forFeature([Record])],
+  controllers: [StatsController],
+  providers: [StatsService],
 })
 export class StatsModule {}

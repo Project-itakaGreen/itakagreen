@@ -1,4 +1,4 @@
 class LogStringObject {
-  colored: string
-  clean: string
+  colored: string;
+  clean: string;
 }

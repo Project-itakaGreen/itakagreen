@@ -41,3 +41,4 @@ function getDomainData(originUrl) {
 		return {}; //object with the data of api
 	}
 }
+

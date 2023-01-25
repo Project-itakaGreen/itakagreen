@@ -11,29 +11,15 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      User,
-    ]),
-    PassportModule,
-    JwtModule.registerAsync({
-      imports:[ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: {expiresIn: config.get('JWT_TOKEN_EXPIRES')}
-      }),
-      inject: [ConfigService],
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [AuthController],
   providers: [
-    GoogleStrategy, 
+    GoogleStrategy,
     SessionSerializer,
     {
-      provide: "AUTH_SERVICE",
+      provide: 'AUTH_SERVICE',
       useClass: AuthService,
     },
-    JwtStrategy,
   ],
 })
 export class AuthModule {}
