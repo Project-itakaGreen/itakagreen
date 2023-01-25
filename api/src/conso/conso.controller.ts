@@ -13,16 +13,19 @@ const DEFAULT_DOMAIN_PERIOD = 1;
 export class ConsoController {
   constructor(private readonly consoService: ConsoService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('total/:period?')
   getTotal(@Param('period') period: number) {
     return this.consoService.getTotal(period ?? DEFAULT_TOTAL_PERIOD);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('day/:period?')
   getDay(@Param('period') period: number) {
     return this.consoService.getDay(period ?? DEFAULT_DAYS_PERIOD);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('domain/:period?')
   getDomain(@Param('period') period: number) {
     return this.consoService.getDomain(period ?? DEFAULT_DOMAIN_PERIOD);
