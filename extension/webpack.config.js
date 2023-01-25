@@ -4,9 +4,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = () => {
-  console.log(`build as ${process.env.NODE_ENV} mode`)
+  const env = process.env.NODE_ENV || 'development'
+  console.log(`build as ${env} mode`)
   return {
-    mode: process.env.NODE_ENV || 'development',
+    mode: env,
     devtool: "source-map",
     entry: {
       background: './src/background/background.ts',
