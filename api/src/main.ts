@@ -1,13 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-
-import * as dotenv from 'dotenv';
-
 import * as session from 'express-session';
-
 import * as passport from 'passport';
-
 import { AppModule } from './app/app.module';
 
 import { LoggerFile } from './app/LoggerFile';

@@ -1,4 +1,4 @@
-class LogStringObject {
+export default class LogStringObject {
   colored: string;
   clean: string;
 }

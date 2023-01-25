@@ -31,6 +31,7 @@ import { JwtStrategy } from './jwt.strategy';
       provide: 'AUTH_SERVICE',
       useClass: AuthService,
     },
+    JwtStrategy,
   ],
 })
 export class AuthModule {}

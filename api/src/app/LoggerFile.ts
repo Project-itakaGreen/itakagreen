@@ -1,5 +1,7 @@
 import { LoggerService } from '@nestjs/common';
 import * as fs from 'fs';
+import DateObjectDto from './dto/dateObject.dto';
+import LogStringObject from './dto/LogStringObject.dto';
 const coloursTxt = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',

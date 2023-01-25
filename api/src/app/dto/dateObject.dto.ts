@@ -1,4 +1,4 @@
-class DateObjectDto {
+export default class DateObjectDto {
   day: string;
   month: string;
   year: number;
