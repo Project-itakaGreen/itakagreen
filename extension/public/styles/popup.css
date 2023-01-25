@@ -98,7 +98,7 @@ span {
   border-radius: 38px 38px 38px 38px;
   display: flex;
   margin: 0px;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .custom-button-left {
