@@ -1,26 +1,24 @@
-export function dbConnection() {
-	return new Promise((resolve, reject) => {
-		let db;
 
-		const DBOpenRequest = indexedDB.open("records", 10);
-		DBOpenRequest.onerror = function (event) {
-			console.error("error opening db");
-			reject();
-		};
+export function dbConnection(): Promise<IDBDatabase|any> {
+    return new Promise((resolve, reject) => {
+        const DBOpenRequest = indexedDB.open("records", 10);
+        DBOpenRequest.onerror = () => {
+            console.error("error opening db");
+            reject();
+        };
 
-		DBOpenRequest.onupgradeneeded = setupDB;
-		DBOpenRequest.onsuccess = function (event) {
-			db = event.target.result;
-			resolve(db);
-		};
-	})
+        DBOpenRequest.onupgradeneeded = setupDB;
+        DBOpenRequest.onsuccess = (event: Event) => {
+            resolve(DBOpenRequest.result as IDBDatabase);
+        };
+    });
 }
 
 /**
  * Setup the database on 'onupgradeneeded' event
  */
-function setupDB(event) {
-	const db = event.target.result;
+function setupDB(event: any): void {
+	const db = event.target.result as IDBDatabase;
 	if (db.objectStoreNames.contains("records")) {
 		db.deleteObjectStore("records");
 	}

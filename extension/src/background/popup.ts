@@ -1,5 +1,3 @@
-"use strict";
-
 // init the data of api for the active tab  
 let activeSiteData = null;
 // init the last origin url
@@ -19,13 +17,13 @@ export function loadPopup() {
 	});
 
 	// get the url of loaded tab 
-	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+	chrome.tabs.onUpdated.addListener(function (tabId: number, changeInfo, tab) {
 		const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
 	});
 }
 
 // get the origin of the url
-function getOrigineFromUrl(url) {
+function getOrigineFromUrl(url: string) {
 	if (url.indexOf("chrome://") != 0 && url.length != 0) {
 		const parsedUrl = new URL(url);
 		return parsedUrl.origin;
@@ -33,7 +31,7 @@ function getOrigineFromUrl(url) {
 }
 
 //verify if the url is the same as the last one
-function getDomainData(originUrl) {
+function getDomainData(originUrl: string) {
 	if (originUrl != lastOriginUrl && originUrl != undefined) {
 		lastOriginUrl = originUrl;
 		// TODO: call api
