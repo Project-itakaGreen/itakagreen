@@ -48,10 +48,11 @@ export class AuthService {
 
     return user;
   }
+
   // logic to create token object
   async login(user: any) {
     const payload = { mail: user.email , sub: user.id };
-    console.log(payload);
+    
     return {
       access_token: this.jwtService.sign(payload),
       token_expire: this.config.get('JWT_TOKEN_EXPIRES'),

@@ -15,7 +15,6 @@ export class AuthController {
   @Get('google/callback')
   async handleRedirect(@Request() req, @Response() res) {
     let accessToken = await this.authService.login(req.user);
-    console.log(accessToken.token_expire.slice(0, -1));
     res.cookie('auth2', accessToken.access_token, {maxAge: Number(accessToken.token_expire.slice(0, -1)) * 1000, httpOnly: true});
     res.redirect('/api');
   }
