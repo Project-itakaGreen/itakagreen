@@ -49,14 +49,14 @@ export class ConsoService {
         
 
         // partie qui rempli un objet avec la date et la somme des consommations
-        let lastWeek = {};
+        let lastWeek = [];
 
         requete.forEach(element => {
             let date = new Date( element.timeInterval * 1000);
             let index = `${('0'+date.getDate()).slice(-2)}/${('0'+date.getMonth()+1).slice(-2)}/${date.getFullYear()}`;
             lastWeek[index] = (lastWeek[index] == undefined) ? (element.gigaOctets * element.domain.co2PerGO) :  lastWeek[index]+(element.gigaOctets * element.domain.co2PerGO);
         });
-        
+
         lastWeek = Object.entries(lastWeek).map((e)=>{
             return {
                 "date": e[0],
