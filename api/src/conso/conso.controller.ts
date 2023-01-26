@@ -30,4 +30,9 @@ export class ConsoController {
         return this.consoService.getDomain( period ?? DEFAULT_DOMAIN_PERIOD );
       }
 
+    @Get('dayDetail/:period?')
+    getDayDetail(@Param('period') period: number) {
+        return this.consoService.getDayDetail( period ?? DEFAULT_DAYS_PERIOD );
+      }
+
 }
