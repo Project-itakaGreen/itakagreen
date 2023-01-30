@@ -1,6 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
 @Controller()
 export class AppController {
@@ -11,11 +13,13 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  // route des logs
-  // TODO secure logs from user
-  @UseGuards(JwtAuthGuard)
-  @Get('logs')
-  getLogs(): string {
-    return this.appService.getLogs();
-  }
+  
+   // route des logs
+   @UseGuards(RolesGuard)
+   @Get('logs')
+   @Roles('admin')
+   getLogs(): string {
+     return this.appService.getLogs();
+   }
+
 }

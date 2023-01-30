@@ -15,4 +15,5 @@ export class CreateUserDto {
   @ValidateIf(o => o.password === null)
   @IsNotEmpty()
   googleId?: string;
+  roles: string;
 }
