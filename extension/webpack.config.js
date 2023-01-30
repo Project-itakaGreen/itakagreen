@@ -1,7 +1,6 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const dotenv = require('dotenv');
-dotenv.config();
+const Dotenv = require('dotenv-webpack');
 
 module.exports = () => {
   const env = process.env.NODE_ENV || 'development'
@@ -30,6 +29,7 @@ module.exports = () => {
       path: path.resolve(__dirname, './dist')
     },
     plugins: [
+      new Dotenv(),
       new CopyWebpackPlugin({
         patterns: [{
           from: './public',

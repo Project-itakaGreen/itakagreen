@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 // init the data of api for the active tab  
 let activeSiteData = null;
 // init the last origin url
