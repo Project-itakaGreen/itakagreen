@@ -1,7 +1,11 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 // init the data of api for the active tab  
 let activeSiteData = null;
 // init the last origin url
 let lastOriginUrl = "";
+
 
 export function loadPopup() {
 	// check if the extension is installed or updated
@@ -39,4 +43,14 @@ function getDomainData(originUrl: string) {
 		return {}; //object with the data of api
 	}
 }
-
+chrome.cookies.get({url: process.env.FRONT_URL, name: "auth2"}, function(cookie) {
+    if(cookie) {
+        // use the cookie value here
+        console.log(cookie.value);
+    } else {
+        console.log("Cookie not found");
+    }
+});
+// chrome.cookies.getAll({domain: "https://your-api-url.com/"}, function(cookies) {
+//     console.log(cookies);
+// });

@@ -8,10 +8,12 @@ import {
 } from '@nestjs/common';
 import { GoogleAuthGuard } from './utils/guards';
 import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
+    private config: ConfigService,
     @Inject('AUTH_SERVICE') private readonly authService: AuthService,
   ) {}
   @UseGuards(GoogleAuthGuard)
@@ -27,7 +29,10 @@ export class AuthController {
     res.cookie('auth2', accessToken.access_token, {
       maxAge: Number(accessToken.token_expire.slice(0, -1)) * 1000,
       httpOnly: true,
+      domain: this.config.get('COOKIE_DOMAIN'),
+      path: '/',
+      sameSite: 'lax',
     });
-    res.redirect('/api');
+    res.redirect(this.config.get('FRONT_URL'));
   }
 }
