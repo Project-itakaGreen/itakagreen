@@ -26,8 +26,8 @@ export function isTokenValid(token: unknown): boolean {
 		console.log("the token is not valid");
 		return false;
 	}
-	const rawPayload = Buffer.from(splitedToken[1], 'base64').toString();
 
+	const rawPayload = Buffer.from(splitedToken[1], 'base64').toString();
 	let payload: {exp: number, iat: number};
 	try {
 		payload = JSON.parse(rawPayload);
@@ -51,9 +51,4 @@ export function isTokenValid(token: unknown): boolean {
 		console.log("token is valid");
 	}
 	return true;
-}
-
-export async function toto(){
-	const token = await getToken()
-	isTokenValid(token);
 }
