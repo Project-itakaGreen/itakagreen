@@ -17,15 +17,22 @@ export function getToken(): Promise<unknown> {
 }
 
 export function isTokenValid(token: unknown): boolean {
-	if(typeof token !== 'string') return false;
+	if(typeof token !== 'string') {
+		console.log("the token does not exist");
+		return false;
+	}
 	const splitedToken = token.split('.');
-	if(splitedToken.length !== 3) return false;
+	if(splitedToken.length !== 3) {
+		console.log("the token is not valid");
+		return false;
+	}
 	const rawPayload = Buffer.from(splitedToken[1], 'base64').toString();
 
 	let payload: {exp: number, iat: number};
 	try {
 		payload = JSON.parse(rawPayload);
 	} catch {
+		console.log("the token is not valid");
 		return false;
 	}
 
