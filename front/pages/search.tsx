@@ -1,3 +1,4 @@
+import SearchBar from "../components/search/SearchBar";
 import CardGraph from "../components/shared/CardGraph";
 
 export default function Search() {
@@ -19,6 +20,8 @@ export default function Search() {
       <h1>Super graph - Not for sale</h1>
 
       <CardGraph chartLabel={chartLabel} chartData={chartData} type={type}/>
+
+      <SearchBar/>
     </>
   );
 }
