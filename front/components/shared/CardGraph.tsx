@@ -2,7 +2,7 @@ import "chart.js/auto";
 import { Chart } from "react-chartjs-2";
 import styled from "styled-components";
 
-export default function CardGraph({ chartLabel, chartData, type, afterBody=""}: any) {
+export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{return ""}}: any) {
 
   const backgroundColor = [
     "rgba(230, 25, 75, 0.5)",
