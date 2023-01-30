@@ -57,21 +57,6 @@ services:
     networks:
       - app-network
 
-  front-prod:
-    container_name: nextjs-prod
-    build:
-      target: production
-      context: ./front
-      dockerfile: Dockerfile.prod
-    restart: on-failure
-    volumes:
-      - ./front:/opt/app
-      - /opt/app/node_modules
-      - /opt/app/.next
-    ports:
-      - '8000:8000'
-    networks:
-      - app-network
 
   #   api:
   # hostname: api

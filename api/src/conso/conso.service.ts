@@ -15,7 +15,6 @@ export class ConsoService {
   ) {}
 
   async getTotal(user: User, period: number) {
-
     const timestamp = this.getTimestampFromPeriod(period);
 
     const total = await this.recordRepository
@@ -27,18 +26,14 @@ export class ConsoService {
       )
       .leftJoin('record.domain', 'domain')
       .where('record.userId = :userId', { userId: user.id })
-      //.andWhere('record.timeInterval > :parameter', { parameter: timestamp })
+      .andWhere('record.timeInterval > :parameter', { parameter: timestamp })
       .groupBy('record.userId')
       .getRawOne();
-    
-    console.log(total);
-
     return total ?? { userId: user.id, totalCo2: '0' };
   }
 
   async getDay(user: User, period: number) {
     const interval = this.getTimestampFromPeriod(period);
-
     const requete = await this.recordRepository
       .createQueryBuilder('record')
       .leftJoinAndSelect('record.domain', 'domain')
@@ -46,10 +41,8 @@ export class ConsoService {
       .andWhere('record.timeInterval > :oneWeek', { oneWeek: interval })
       .orderBy('record.timeInterval')
       .getMany();
-
     // partie qui rempli un objet avec la date et la somme des consommations
-    const lastWeek = {};
-
+    const lastWeek = [];
     requete.forEach((element) => {
       const date = new Date(element.timeInterval * 1000);
       const index = `${('0' + date.getDate()).slice(-2)}/${(
@@ -59,23 +52,27 @@ export class ConsoService {
       ).slice(-2)}/${date.getFullYear()}`;
       lastWeek[index] =
         lastWeek[index] == undefined
-          ? element.bytes * element.domain.co2PerGO / 1073741824
+          ? (element.bytes * element.domain.co2PerGO) / 1073741824
           : lastWeek[index] +
-            element.bytes * element.domain.co2PerGO / 1073741824;
+            (element.bytes * element.domain.co2PerGO) / 1073741824;
     });
-
-    return lastWeek;
+    const reformatLastWeek = Object.entries(lastWeek).map((e) => {
+      return {
+        date: e[0],
+        co2: e[1],
+      };
+    });
+    return reformatLastWeek;
   }
 
   async getDomain(user: User, period: number) {
     const timestamp = this.getTimestampFromPeriod(period);
-
     const requete = await this.recordRepository
       .createQueryBuilder('record')
-      .select('domain.name')
+      .select('domain.name', 'domain')
       .addSelect(
         'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
-        'totalCo2',
+        'co2',
       )
       .leftJoin('record.domain', 'domain')
       .where('record.userId = :userId', { userId: user.id })
