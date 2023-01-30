@@ -3,4 +3,5 @@ export class CreateUserDto {
   email?: string;
   password?: string;
   googleId?: string;
+  roles: string;
 }
