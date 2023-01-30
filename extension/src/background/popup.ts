@@ -40,14 +40,32 @@ function getDomainData(originUrl: string) {
 		return {}; //object with the data of api
 	}
 }
-chrome.cookies.get({url: process.env.FRONT_URL, name: "auth2"}, function(cookie) {
-    if(cookie) {
-        // use the cookie value here
-        console.log(cookie.value);
-    } else {
-        console.log("Cookie not found");
-    }
-});
-// chrome.cookies.getAll({domain: "https://your-api-url.com/"}, function(cookies) {
-//     console.log(cookies);
+// chrome.cookies.get({url: process.env.FRONT_URL, name: "auth2"}, function(cookie) {
+//     if(cookie) {
+//         // use the cookie value here
+//         console.log(cookie.value);
+//     } else {
+//         console.log("Cookie not found");
+//     }
 // });
+
+
+chrome.browserAction.onClicked.addListener(function (tab) {
+  chrome.cookies.get({ url: process.env.FRONT_URL, name: "auth2" }, function (cookie) {
+    var xhr = new XMLHttpRequest();
+    if (cookie) {
+      xhr.open("GET", "/public/popup-connected.html", true);
+    } else {
+      xhr.open("GET", "/public/popup.html", true);
+    }
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        chrome.windows.create({
+          type: "popup",
+          url: "data:text/html," + encodeURIComponent(xhr.responseText),
+        });
+      }
+    };
+    xhr.send();
+  });
+});
