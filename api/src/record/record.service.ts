@@ -14,7 +14,6 @@ export class RecordService {
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
-    @InjectRepository(User)
     private readonly domainService: DomainService,
   ) {}
 
