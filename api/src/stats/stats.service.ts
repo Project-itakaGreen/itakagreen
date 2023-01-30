@@ -17,12 +17,12 @@ export class StatsService {
       .createQueryBuilder('record')
       .select('domain.name')
       .addSelect(
-        'SUM(record.bytes * 1_000_000_000 * domain.co2PerGO)',
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
         'totalCo2',
       )
       .leftJoin('record.domain', 'domain')
       .groupBy('domain.name')
-      .orderBy('SUM(record.bytes * 1_000_000_000 * domain.co2PerGO)', 'DESC')
+      .orderBy('SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric', 'DESC')
       .limit(number)
       .getRawMany();
 
@@ -45,9 +45,9 @@ export class StatsService {
       const index = `${new Intl.DateTimeFormat('en-US', options).format(date)}`;
       daysInWeek[index] =
         daysInWeek[index] == undefined
-          ? element.bytes * 1_000_000_000 * element.domain.co2PerGO
+          ? element.bytes * element.domain.co2PerGO / 1073741824
           : daysInWeek[index] +
-            element.bytes * 1_000_000_000 * element.domain.co2PerGO;
+            element.bytes * element.domain.co2PerGO / 1073741824;
     });
 
     return daysInWeek;
@@ -67,9 +67,9 @@ export class StatsService {
       const index = `${('0' + date.getHours()).slice(-2)}`;
       hourInDays[index] =
         hourInDays[index] == undefined
-          ? element.bytes * 1_000_000_000 * element.domain.co2PerGO
+          ? element.bytes * element.domain.co2PerGO / 1073741824
           : hourInDays[index] +
-            element.bytes * 1_000_000_000 * element.domain.co2PerGO;
+            element.bytes * element.domain.co2PerGO / 1073741824;
     });
 
     return hourInDays;

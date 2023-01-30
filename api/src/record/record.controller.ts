@@ -1,27 +1,30 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
 import { CreateRecordDto } from './dto/create-record.dto';
 import { RecordService } from './record.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('record')
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('single/:userId')
+  @Post('single')
   create(
     @Body() createRecordDto: CreateRecordDto,
-    @Param('userId') userId: number,
+    @Request() req
   ) {
+    const userId = req.user.id;
     return this.recordService.create(createRecordDto, userId);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('many/:userId')
+  @Post('many')
   createMany(
     @Body() createRecordDto: CreateRecordDto[],
-    @Param('userId') userId: number,
+    @Request() req
   ) {
+    const userId = req.user.id;
     return this.recordService.createMany(createRecordDto, userId);
   }
 }
