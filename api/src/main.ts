@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { AppModule } from './app/app.module';
 
+import { AppModule } from './app/app.module';
 import { LoggerFile } from './app/LoggerFile';
 
 async function bootstrap() {
@@ -13,7 +13,7 @@ async function bootstrap() {
   });
   const logger: Logger = new Logger('Main');
   const config = app.get(ConfigService);
-
+  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
   app.use(
     session({
