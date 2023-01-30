@@ -2,10 +2,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
+import { getCookies } from 'cookies-next'
+import { useEffect, useState } from 'react'
+import { parse } from 'cookie'
+import { Router } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home({auth2Cookie}:any) {
   return (
     <>
       <Head>
@@ -120,4 +124,19 @@ export default function Home() {
       </main>
     </>
   )
+}
+
+export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
+  let auth2Cookie = context.req.headers.cookie
+    .split(';')
+    .find((c: string) => c.trim().startsWith('auth2='))
+  if (auth2Cookie) {
+    auth2Cookie = auth2Cookie.split('=')[1]
+  }
+  console.log(auth2Cookie)
+  return {
+    props: {
+      auth2Cookie: auth2Cookie || null
+    }
+  }
 }

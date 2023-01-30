@@ -22,7 +22,7 @@ export class DomainService {
    * return the co2 emissions of a domain,
    * get this emissions from an API if it is not already stored in the database
    */
-  async getOrCreate(domainName): Promise<Domain> {
+  async getOrCreate(domainName: string): Promise<Domain> {
     const domain: Domain = await this.domainRepository.findOne({
       where: {
         name: domainName,

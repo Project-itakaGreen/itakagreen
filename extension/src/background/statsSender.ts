@@ -1,22 +1,30 @@
-export async function loadStatsSender(db) {
+import { getToken, isTokenValid } from './token';
+
+import type { RecordI } from './interfaces/RecordI';
+export async function loadStatsSender(db: IDBDatabase) {
 	// todo remove the remove
 	chrome.storage.local.remove('lastSynchronizationDate');
 	logLastSynchronisation();
-	const bool = await shouldSendStats();
-	if (bool) {
-		sendStats(db);
+
+	const isTime = await shouldSendStats();
+	if(!isTime) return;
+
+	const token = await getToken();
+	
+	if (isTokenValid(token)) {
+		sendStats(db, token as string);
 	}
 }
 
-async function sendStats(db) {
-	const records = await getAllRecords(db);
-	// todo use the conection
-	const idUser = 2;
-	const urlSendpoint = 'http://localhost:8080/api/record/many/' + idUser;
+async function sendStats(db: IDBDatabase, token: string) {
+	const records = await getAllRecords(db) as RecordI[];
+
+	const urlSendpoint = 'http://localhost:8080/api/record/many/';
 	fetch(urlSendpoint, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + token
 			},
 			body: JSON.stringify(records)
 		})
@@ -34,17 +42,17 @@ async function sendStats(db) {
 		});
 }
 
-function getAllRecords(db) {
+function getAllRecords(db: IDBDatabase):Promise<RecordI[]> {
 	const transaction = db.transaction(["records"], "readonly");
 	const objectStore = transaction.objectStore("records");
-	const promiseRecords = new Promise((resolve, reject) => {
+	const promiseRecords:Promise<RecordI[]> = new Promise((resolve, reject) => {
 		const request = objectStore.getAll();
-		request.onsuccess = function (event) {
-			resolve(event.target.result);
+		request.onsuccess = function (event: Event) {
+			resolve(request.result);
 		}
-		request.onerror = function (event) {
+		request.onerror = function (event: Event) {
 			console.error("Error while getting all records");
-			reject(event.target.error);
+			reject([]);
 		}
 	})
 
@@ -54,7 +62,7 @@ function getAllRecords(db) {
 /**
  * Delete all the records
  */
-function clearDb(db) {
+function clearDb(db: IDBDatabase) {
 	const transaction = db.transaction(["records"], "readwrite");
 	const objectStore = transaction.objectStore("records");
 	const request = objectStore.clear();
@@ -78,7 +86,7 @@ function updateLastStatsSend() {
 /**
  * Return if the data should be send as a boolean
  */
-function shouldSendStats() {
+function shouldSendStats():Promise<boolean|any> {
 	const date = new Date();
 	date.setHours(0, 0, 0, 0);
 	const dayInMs = date.getTime();

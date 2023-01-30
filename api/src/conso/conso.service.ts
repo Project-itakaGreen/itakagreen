@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Record } from 'src/record/entities/record.entity';
 import { Repository } from 'typeorm';
 
+import { User } from './../user/entities/user.entity';
+
 @Injectable()
 export class ConsoService {
   private readonly logger: Logger = new Logger(ConsoService.name);
@@ -12,8 +14,7 @@ export class ConsoService {
     private readonly recordRepository: Repository<Record>,
   ) {}
 
-  async getTotal(period: number) {
-    const idUser = 1; // TODO get current user
+  async getTotal(user: User, period: number) {
 
     const timestamp = this.getTimestampFromPeriod(period);
 
@@ -21,27 +22,27 @@ export class ConsoService {
       .createQueryBuilder('record')
       .select('record.userId')
       .addSelect(
-        'SUM(record.bytes * 1_073_741_824 * domain.co2PerGO)',
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
         'totalCo2',
       )
       .leftJoin('record.domain', 'domain')
-      .where('record.userId = :userId', { userId: idUser })
-      .andWhere('record.timeInterval > :parameter', { parameter: timestamp })
+      .where('record.userId = :userId', { userId: user.id })
+      //.andWhere('record.timeInterval > :parameter', { parameter: timestamp })
       .groupBy('record.userId')
       .getRawOne();
+    
+    console.log(total);
 
-    return total ?? { userId: idUser, totalCo2: '0' };
+    return total ?? { userId: user.id, totalCo2: '0' };
   }
 
-  async getDay(period: number) {
-    const idUser = 1; // TODO get current user
-
+  async getDay(user: User, period: number) {
     const interval = this.getTimestampFromPeriod(period);
 
     const requete = await this.recordRepository
       .createQueryBuilder('record')
       .leftJoinAndSelect('record.domain', 'domain')
-      .where('record.userId = :userId', { userId: idUser })
+      .where('record.userId = :userId', { userId: user.id })
       .andWhere('record.timeInterval > :oneWeek', { oneWeek: interval })
       .orderBy('record.timeInterval')
       .getMany();
@@ -58,28 +59,26 @@ export class ConsoService {
       ).slice(-2)}/${date.getFullYear()}`;
       lastWeek[index] =
         lastWeek[index] == undefined
-          ? element.bytes * 1_073_741_824 * element.domain.co2PerGO
+          ? element.bytes * element.domain.co2PerGO / 1073741824
           : lastWeek[index] +
-            element.bytes * 1_073_741_824 * element.domain.co2PerGO;
+            element.bytes * element.domain.co2PerGO / 1073741824;
     });
 
     return lastWeek;
   }
 
-  async getDomain(period: number) {
-    const idUser = 1; // TODO get current user
-
+  async getDomain(user: User, period: number) {
     const timestamp = this.getTimestampFromPeriod(period);
 
     const requete = await this.recordRepository
       .createQueryBuilder('record')
       .select('domain.name')
       .addSelect(
-        'SUM(record.bytes * 1_073_741_824 * domain.co2PerGO)',
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
         'totalCo2',
       )
       .leftJoin('record.domain', 'domain')
-      .where('record.userId = :userId', { userId: idUser })
+      .where('record.userId = :userId', { userId: user.id })
       .andWhere('record.timeInterval > :parameter', { parameter: timestamp })
       .groupBy('domain.name')
       .getRawMany();

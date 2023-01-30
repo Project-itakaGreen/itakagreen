@@ -13,6 +13,7 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  
    // route des logs
    @UseGuards(RolesGuard)
    @Get('logs')
@@ -20,4 +21,5 @@ export class AppController {
    getLogs(): string {
      return this.appService.getLogs();
    }
+
 }

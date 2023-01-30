@@ -14,28 +14,13 @@ export class RecordService {
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly domainService: DomainService,
   ) {}
 
-  async create(createRecordDto: CreateRecordDto, userId: number) {
+  async create(createRecordDto: CreateRecordDto, user: User) {
     const domain = await this.domainService.getOrCreate(
       createRecordDto.domainName,
     );
-
-    let user = await this.userRepository.findOne({
-      where: {
-        id: userId,
-      },
-    });
-
-    // TODO use authentification
-    if (!user) {
-      user = new User();
-      user.email = 'test@test.test';
-      user = await this.userRepository.save(user);
-    }
 
     const record = new Record();
     record.domain = domain;
@@ -46,11 +31,9 @@ export class RecordService {
     return this.recordRepository.save(record);
   }
 
-  async createMany(createRecordDtos: CreateRecordDto[], userId: number) {
-    console.log('createMany');
-    console.log(createRecordDtos);
+  async createMany(createRecordDtos: CreateRecordDto[], user: User) {
     const createdRecords = createRecordDtos.map(async (record) => {
-      return await this.create(record, userId);
+      return await this.create(record, user);
     });
     return await Promise.allSettled(createdRecords);
   }
