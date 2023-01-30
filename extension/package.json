@@ -21,6 +21,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "dotenv-webpack": "^8.0.1"
   }
 }
