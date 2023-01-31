@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Tracé_13" data-name="Tracé 13" d="M265.2,512.916,149.363,596.309,99.4,1167.328l264.647-21.087s1732.281,70.867,1738.983,64.166S2210.249,724.1,2206.768,720.125,1947.3,792.712,1947.3,792.712l-536.167-55.991-366.852-73.648-345.217-69.1L490.459,511Z" transform="translate(-99.402 -511.001)" fill="none"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" x1="-0.032" y1="0.894" x2="-0.032" y2="0.894" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#39b54a"/>
+      <stop offset="0.036" stop-color="#39b54a"/>
+      <stop offset="0.793" stop-color="#009245"/>
+      <stop offset="1" stop-color="#009245"/>
+    </linearGradient>
+    <clipPath id="clip-Web_1920_2">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Web_1920_2" data-name="Web 1920 – 2" clip-path="url(#clip-Web_1920_2)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <g id="Groupe_14" data-name="Groupe 14" transform="translate(2028.324 574.517) rotate(180)">
+      <g id="Groupe_13" data-name="Groupe 13" clip-path="url(#clip-path)">
+        <rect id="Rectangle_10" data-name="Rectangle 10" width="2162.568" height="880.413" transform="matrix(0.996, -0.084, 0.084, 0.996, -58.93, 4.953)" fill="url(#linear-gradient)"/>
+      </g>
+    </g>
+  </g>
+</svg>

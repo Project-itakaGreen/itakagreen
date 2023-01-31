@@ -37,8 +37,8 @@ export default function CardGraph({ chartLabel, chartData, type }: any) {
 
   return (
     <WrapperGraph>
-      <h3>It's my graph</h3>
-      <Chart type={type} data={data} options={options} height={650} width={800}/>
+      <h3>Votre consomation par <span>jours</span> </h3>
+      <Chart type={type} data={data} options={options} height={400} width={400}/>
     </WrapperGraph>
   );
 }
@@ -46,5 +46,14 @@ export default function CardGraph({ chartLabel, chartData, type }: any) {
 const WrapperGraph = styled.div`
   width:300;
   height:300;
+  h3{
+    text-align: center;
+    color: #009245;
+  }
+  span{
+    color: green;
+    font-size: 1.5em;
+  }
 `;
+
 
