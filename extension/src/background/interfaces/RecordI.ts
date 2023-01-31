@@ -1,5 +1,5 @@
 export interface RecordI {
-	domainName: string,
-	timeInterval: number,
-	bytes: number,
+  domainName: string;
+  timeInterval: number;
+  bytes: number;
 }
