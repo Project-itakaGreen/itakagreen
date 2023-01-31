@@ -1,19 +1,22 @@
-// ---------------- POPUP INTERACT ----------------
-const loginButton = document.getElementById("google-login-button");
-console.log(loginButton)
-loginButton.addEventListener("click", handleLogin);
+// ---------------- POPUP INTERACT ---------------- //
+
+// Google connection
+const loginButton = document
+  .getElementById("google-login-button")
+  .addEventListener("click", handleLogin);
 function handleLogin() {
-  console.log("login")
-  // const loginUrl = 'http://localhost:8080/api/auth/google/login';
-  // location.replace(loginUrl);
-  window.open("http://localhost:8080/api/auth/google/login", "_blank");
-
-  // chrome.identity.launchWebAuthFlow({
-  //   url: 'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=<YOUR_CLIENT_ID>&redirect_uri=<YOUR_REDIRECT_URI>&scope=<YOUR_SCOPES>',
-  //   interactive: true
-  // }, function(redirect_url) {
-  //   // Handle the redirect URL and extract the access token
-  //   console.log(redirect_url)
-  // });
-
+  console.log("login");
+  window.open(process.env.API_LOGIN_URL, "_blank");
 }
+
+// Get cookie + load second popup if token exist
+chrome.cookies.get(
+  { url: process.env.FRONT_URL, name: "auth2" },
+  function (cookie) {
+    if (cookie) {
+      console.log(cookie.value);
+      // Load Connected Popup
+      window.location.href = "./popup-connected.html";
+    }
+  }
+);
