@@ -6,7 +6,7 @@ const loginButton = document
   .addEventListener("click", handleLogin);
 function handleLogin() {
   console.log("login");
-  window.open(process.env.API_LOGIN_URL, "_blank");
+  window.open(process.env.API_URL + "/auth/google/login", "_blank");
 }
 
 // Get cookie + load second popup if token exist
