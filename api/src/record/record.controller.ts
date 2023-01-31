@@ -10,20 +10,14 @@ export class RecordController {
 
   @UseGuards(JwtAuthGuard)
   @Post('single')
-  create(
-    @Body() createRecordDto: CreateRecordDto,
-    @Request() req
-  ) {
+  create(@Body() createRecordDto: CreateRecordDto, @Request() req) {
     const userId = req.user.id;
     return this.recordService.create(createRecordDto, userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('many')
-  createMany(
-    @Body() createRecordDto: CreateRecordDto[],
-    @Request() req
-  ) {
+  createMany(@Body() createRecordDto: CreateRecordDto[], @Request() req) {
     const userId = req.user.id;
     return this.recordService.createMany(createRecordDto, userId);
   }

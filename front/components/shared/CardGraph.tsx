@@ -47,7 +47,7 @@ export default function CardGraph({ chartLabel, chartData, type }: any) {
 
   return (
     <WrapperGraph>
-      <h3>It's my graph</h3>
+      <h3>It&apos;s my graph</h3>
       <Chart type={type} data={data} options={options} height={650} width={800}/>
     </WrapperGraph>
   );

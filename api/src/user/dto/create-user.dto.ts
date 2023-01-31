@@ -6,13 +6,13 @@ export class CreateUserDto {
   @IsEmail()
   email?: string;
 
-  @ValidateIf(o => o.googleId === null)
+  @ValidateIf((o) => o.googleId === null)
   @MinLength(8, {
     message: 'The password is too short',
   })
   password?: string;
 
-  @ValidateIf(o => o.password === null)
+  @ValidateIf((o) => o.password === null)
   @IsNotEmpty()
   googleId?: string;
   roles: string;

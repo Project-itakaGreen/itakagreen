@@ -13,13 +13,12 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  
-   // route des logs
-   @UseGuards(RolesGuard)
-   @Get('logs')
-   @Roles('admin')
-   getLogs(): string {
-     return this.appService.getLogs();
-   }
 
+  // route des logs
+  @UseGuards(RolesGuard)
+  @Get('logs')
+  @Roles('admin')
+  getLogs(): string {
+    return this.appService.getLogs();
+  }
 }

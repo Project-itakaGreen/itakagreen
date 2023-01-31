@@ -21,7 +21,7 @@ export class User {
   googleId?: string;
 
   @Column({
-    default: "user",
+    default: 'user',
   })
   roles: string;
 }

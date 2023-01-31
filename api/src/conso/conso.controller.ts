@@ -15,28 +15,22 @@ export class ConsoController {
 
   @UseGuards(JwtAuthGuard)
   @Get('total/:period?')
-  getTotal(
-    @Param('period') period: number,
-    @Request() req
-  ) {
+  getTotal(@Param('period') period: number, @Request() req) {
     return this.consoService.getTotal(req.user, period ?? DEFAULT_TOTAL_PERIOD);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('day/:period?')
-  getDay(
-    @Param('period') period: number,
-    @Request() req
-  ) {
+  getDay(@Param('period') period: number, @Request() req) {
     return this.consoService.getDay(req.user, period ?? DEFAULT_DAYS_PERIOD);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('domain/:period?')
-  getDomain(
-    @Param('period') period: number,
-    @Request() req
-  ) {
-    return this.consoService.getDomain(req.user, period ?? DEFAULT_DOMAIN_PERIOD);
+  getDomain(@Param('period') period: number, @Request() req) {
+    return this.consoService.getDomain(
+      req.user,
+      period ?? DEFAULT_DOMAIN_PERIOD,
+    );
   }
 }
