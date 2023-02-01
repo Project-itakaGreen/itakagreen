@@ -30,7 +30,8 @@ export class DomainService {
     });
     if (domain) return domain;
 
-    let gco2ByGO = 0;
+    let gco2ByGO: number;
+    let renewable: boolean;
     try {
       const apiResponse: ApiWebsitecarbonDto = await this.queryEmissionsAPI(
         domainName,
@@ -41,18 +42,24 @@ export class DomainService {
           ? apiResponse.statistics.co2.renewable.grams
           : apiResponse.statistics.co2.grid.grams;
 
+      renewable = apiResponse.green === true;
       const bytesToGO = 1_073_741_824;
       gco2ByGO = (co2PerBaseCalculeBytes / baseCalculeBytes) * bytesToGO;
     } catch (error) {
       this.logger.warn(
         `error in fetching the consomation for the domain : "${domainName}"`,
       );
-      gco2ByGO = 0.81 * 442; // https://sustainablewebdesign.org/calculating-digital-emissions/
+      // https://sustainablewebdesign.org/calculating-digital-emissions/
+      const carbonFactor = 442;
+      const tWhGo = 0.81;
+      gco2ByGO = tWhGo * carbonFactor; 
+      renewable = false
     }
 
     const newDomain = new Domain();
     newDomain.name = domainName;
     newDomain.co2PerGO = gco2ByGO;
+    newDomain.renewable = renewable;
 
     const savedDomain: Domain = await this.domainRepository.save(newDomain);
 
