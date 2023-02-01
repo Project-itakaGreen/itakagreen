@@ -1,10 +1,48 @@
 import React from 'react';
 import styled from 'styled-components';
 
+export default function Home({auth2Token}:any) {
+  return (
+    <Container>
+      <LeftContainer>
+        <h1> Optez pour une empreinte <br /> numérique responsable <br /> avec Itakagreen</h1>
+        <button>
+          <a href="#">Installer l&apos;extension</a>
+        </button>
+
+      </LeftContainer>
+      <RightContainer>
+      </RightContainer>
+    </Container>
+  )
+};
+
+export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
+  const cookie =  context.req.headers?.cookie;
+  let auth2Token = "";
+  if (cookie) {
+    const auth2Cookie = context.req.headers.cookie
+      .split(';')
+      .find((c: string) => c.trim().startsWith('auth2='));
+    if (auth2Cookie) {
+      auth2Token = auth2Cookie.split('=')[1];
+    }
+  }
+  
+  console.log(auth2Token)
+  return {
+    props: {
+      auth2Token: auth2Token || null
+    }
+  }
+}
+
+
 
 const RightContainer = styled.div`
   flex: 1;
 `;
+
 const LeftContainer = styled.div`
     flex: 1;
     display: flex;
@@ -52,43 +90,3 @@ const Container = styled.div`
   background-position: center;
 
 `;
-
-
-export default function Home({auth2Token}:any) {
-  <Container>
-
-    <LeftContainer>
-
-      <h1> Optez pour une empreinte <br /> numérique responsable <br /> avec Itakagreen</h1>
-      <button>
-        <a href="#">Installer l'extension</a>
-      </button>
-
-    </LeftContainer>
-    <RightContainer>
-    </RightContainer>
-  </Container>
-
-);
-
-export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
-  const cookie =  context.req.headers?.cookie;
-  let auth2Token = "";
-  if (cookie) {
-    const auth2Cookie = context.req.headers.cookie
-      .split(';')
-      .find((c: string) => c.trim().startsWith('auth2='));
-    if (auth2Cookie) {
-      auth2Token = auth2Cookie.split('=')[1];
-    }
-  }
-  
-  console.log(auth2Token)
-  return {
-    props: {
-      auth2Token: auth2Token || null
-    }
-  }
-}
-
-

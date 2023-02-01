@@ -36,7 +36,7 @@ const ContactForm: React.FC<Props> = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handletext = (event) => {
+  const handletext = (event: any): void => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value
