@@ -2,9 +2,16 @@ import CardGraph from "../components/shared/CardGraph";
 import TableWithPagination from "../components/shared/TableWithPagination";
 import styled from "styled-components";
 import React from "react";
+import axios from "axios";
 
-export default function Details() {
+export default function Details({auth2Token}:any) {
   const KEEP_VALUES = 3;
+
+  console.log(auth2Token)
+
+  const dataDomain = requestApiData("http://localhost:8080/api/conso/domain/1", auth2Token).then(result => {return result});
+
+ 
 
   const data = [
     {
@@ -117,6 +124,45 @@ export default function Details() {
       </TabContaire>
     </>
   );
+}
+
+async function requestApiData(url: any,token : any)
+{
+  let data;
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  
+  await axios.get(url, { headers })
+    .then(response => {
+      data= response.data;
+    })
+    .catch(error => {
+      console.error(error);
+    });
+ 
+    return data;
+}
+
+
+export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
+  const cookie =  context.req.headers?.cookie;
+  let auth2Token = "";
+  if (cookie) {
+    const auth2Cookie = context.req.headers.cookie
+      .split(';')
+      .find((c: string) => c.trim().startsWith('auth2='));
+    if (auth2Cookie) {
+      auth2Token = auth2Cookie.split('=')[1];
+    }
+  }
+  
+  console.log(auth2Token)
+  return {
+    props: {
+      auth2Token: auth2Token || null
+    }
+  }
 }
 
 const TabContaire = styled.div`
