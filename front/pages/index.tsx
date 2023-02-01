@@ -3,9 +3,7 @@ import styled from 'styled-components';
 
 
 const RightContainer = styled.div`
-flex: 1;
-
-
+  flex: 1;
 `;
 const LeftContainer = styled.div`
     flex: 1;
@@ -56,7 +54,7 @@ const Container = styled.div`
 `;
 
 
-export default () => (
+export default function Home({auth2Token}:any) {
   <Container>
 
     <LeftContainer>
@@ -73,6 +71,24 @@ export default () => (
 
 );
 
-
+export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
+  const cookie =  context.req.headers?.cookie;
+  let auth2Token = "";
+  if (cookie) {
+    const auth2Cookie = context.req.headers.cookie
+      .split(';')
+      .find((c: string) => c.trim().startsWith('auth2='));
+    if (auth2Cookie) {
+      auth2Token = auth2Cookie.split('=')[1];
+    }
+  }
+  
+  console.log(auth2Token)
+  return {
+    props: {
+      auth2Token: auth2Token || null
+    }
+  }
+}
 
 

@@ -19,4 +19,9 @@ export class User {
     nullable: true,
   })
   googleId?: string;
+
+  @Column({
+    default: 'user',
+  })
+  roles: string;
 }

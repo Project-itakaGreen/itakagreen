@@ -10,7 +10,9 @@
     "webNavigation",
     "tabs",
     "webRequest",
-    "storage"
+    "storage",
+    "identity",
+    "cookies"
   ],
   "host_permissions": [
     "<all_urls>"
