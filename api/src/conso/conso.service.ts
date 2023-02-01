@@ -4,7 +4,6 @@ import { Record } from 'src/record/entities/record.entity';
 import { User } from './../user/entities/user.entity';
 import { Repository } from 'typeorm';
 
-
 @Injectable()
 export class ConsoService {
   private readonly logger: Logger = new Logger(ConsoService.name);
@@ -82,8 +81,8 @@ export class ConsoService {
 
     return requete;
   }
-  
-async getDayDetail(user: User,period: number) {
+
+  async getDayDetail(user: User, period: number) {
     const interval = this.getTimestampFromPeriod(period);
 
     const requete = await this.recordRepository
@@ -92,51 +91,49 @@ async getDayDetail(user: User,period: number) {
       .where('record.userId = :userId', { userId: user.id })
       .andWhere('record.timeInterval > :oneWeek', { oneWeek: interval })
       .orderBy('record.timeInterval')
-      .getMany(); 
+      .getMany();
 
     // partie qui rempli un objet avec la date et la somme des consommations
-    let lastWeek = {};
+    const lastWeek = [];
 
     requete.forEach((element) => {
-        const date = new Date(element.timeInterval * 1000);
-        const index = `${('0' + date.getDate()).slice(-2)}/${(
-          '0' +
-          date.getMonth() +
-          1
-        ).slice(-2)}/${date.getFullYear()}`;
+      const date = new Date(element.timeInterval * 1000);
+      const index = `${('0' + date.getDate()).slice(-2)}/${(
+        '0' +
+        date.getMonth() +
+        1
+      ).slice(-2)}/${date.getFullYear()}`;
 
-        if(lastWeek[index]==undefined)
-            lastWeek[index]= {};
+      if (lastWeek[index] == undefined) lastWeek[index] = {};
 
-        lastWeek[index][element.domain.name] =
-            lastWeek[index][element.domain.name] == undefined
-            ? element.gigaOctets * element.domain.co2PerGO
-            : lastWeek[index][element.domain.name] + element.gigaOctets * element.domain.co2PerGO;
-      });
+      lastWeek[index][element.domain.name] =
+        lastWeek[index][element.domain.name] == undefined
+          ? (element.bytes * element.domain.co2PerGO) / 1073741824
+          : lastWeek[index][element.domain.name] +
+            (element.bytes * element.domain.co2PerGO) / 1073741824;
+    });
 
+    const reformatLastWeek = Object.entries(lastWeek).map((e) => {
+      return {
+        day: e[0],
+        domains: Object.entries(e[1])
+          .map((f) => {
+            return {
+              name: f[0],
+              co2: f[1],
+            };
+          })
+          .sort((a, b) => Number(b.co2) - Number(a.co2)),
+      };
+    });
+    reformatLastWeek.forEach((element) => {
+      element['totalCo2'] = sum(element.domains, 'co2');
+    });
+    return reformatLastWeek;
+  }
 
-      let objLastWeek = Object.entries(lastWeek)
-      .map((e) => {
-        return {
-          day: e[0],
-          domains: Object.entries(e[1])
-            .map((f)=>
-            {
-                return{
-                    name: f[0],
-                    co2: f[1]
-                };
-            }).sort((a,b)=>b.co2-a.co2)
-        }
-      })
-      objLastWeek.forEach((element)=>
-      {
-        element['totalCo2'] = sum(element.domains,'co2')
-      })
-  return objLastWeek;
-}
-
-  getTimestampFromPeriod(period: number) { // partie qui récupere le timestamp de la date du jour - x jour
+  getTimestampFromPeriod(period: number) {
+    // partie qui récupere le timestamp de la date du jour - x jour
     const date = new Date();
 
     const day = date.getDate();
@@ -156,11 +153,10 @@ async getDayDetail(user: User,period: number) {
   }
 }
 
-function sum( obj: any , property: string) {
-    var sum = 0;   
-    obj.forEach((element)=>
-    {
-        sum += element[property];
-    })
-    return sum;
-  }
+function sum(obj: any, property: string) {
+  let sum = 0;
+  obj.forEach((element) => {
+    sum += element[property];
+  });
+  return sum;
+}

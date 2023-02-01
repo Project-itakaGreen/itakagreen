@@ -1,11 +1,10 @@
 import CardGraph from "../components/shared/CardGraph";
 import TableWithPagination from "../components/shared/TableWithPagination";
-import styled from 'styled-components';
-import React from 'react';
+import styled from "styled-components";
+import React from "react";
 
 export default function Details() {
-
-    const KEEP_VALUES = 3;
+  const KEEP_VALUES = 3;
 
   const data = [
     {
@@ -43,60 +42,82 @@ export default function Details() {
   const chartLabel = data.map((e) => e.day);
   const chartData = data.map((e) => e.totalCo2);
 
-  const allDaysdomainsArray=data.map(e=>{
-        let domainString = new Array("\n");
+  const allDaysdomainsArray = data.map((e) => {
+    let domainString = new Array("\n");
 
-        let calculCo2 = 0;
+    let calculCo2 = 0;
 
-        e.domains.map((domain,index)=>{
-            if(index<KEEP_VALUES)
-             domainString.push(domain.name+" : "+domain.co2+" grammes \n");
-            else
-                calculCo2 += domain.co2;
-        })
-
-        if(e.domains.length>KEEP_VALUES)
-            domainString.push("et "+ e.domains.slice(KEEP_VALUES).length +" autres : "+calculCo2+" grammes");
-
-        domainString.push("\n");
-        
-        return domainString
+    e.domains.map((domain, index) => {
+      if (index < KEEP_VALUES)
+        domainString.push(domain.name + " : " + domain.co2 + " grammes \n");
+      else calculCo2 += domain.co2;
     });
 
+    if (e.domains.length > KEEP_VALUES)
+      domainString.push(
+        "et " +
+          e.domains.slice(KEEP_VALUES).length +
+          " autres : " +
+          calculCo2 +
+          " grammes"
+      );
+
+    domainString.push("\n");
+
+    return domainString;
+  });
+
   const arrayType = ["bar", "doughnut", "pie", "line", "polarArea", "radar"];
-  
-  const afterBody = (context:any)=>
-  {
-     return allDaysdomainsArray[context[0].dataIndex];
-  }
+
+  const afterBody = (context: any) => {
+    return allDaysdomainsArray[context[0].dataIndex];
+  };
 
   return (
-     <>
+    <>
       <h1>Super graph - Not for sale</h1>
       <ContainerGraphGlobal>
-      <ContainerGraph>
-      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[0]} afterBody={afterBody}/>
-      </ContainerGraph>
-      <ContainerGraph>
-      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[1]} afterBody={afterBody}/>
-      </ContainerGraph>
+        <ContainerGraph>
+          <CardGraph
+            chartLabel={chartLabel}
+            chartData={chartData}
+            type={arrayType[0]}
+            afterBody={afterBody}
+          />
+        </ContainerGraph>
+        <ContainerGraph>
+          <CardGraph
+            chartLabel={chartLabel}
+            chartData={chartData}
+            type={arrayType[1]}
+            afterBody={afterBody}
+          />
+        </ContainerGraph>
       </ContainerGraphGlobal>
       <ContainerGraphGlobal2>
-      <ContainerGraph>
-      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[2]} afterBody={afterBody}/>
-      </ContainerGraph>
-      <ContainerGraph>
-      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[3]} afterBody={afterBody}/>
-      </ContainerGraph>
+        <ContainerGraph>
+          <CardGraph
+            chartLabel={chartLabel}
+            chartData={chartData}
+            type={arrayType[2]}
+            afterBody={afterBody}
+          />
+        </ContainerGraph>
+        <ContainerGraph>
+          <CardGraph
+            chartLabel={chartLabel}
+            chartData={chartData}
+            type={arrayType[3]}
+            afterBody={afterBody}
+          />
+        </ContainerGraph>
       </ContainerGraphGlobal2>
       <TabContaire>
-      <TableWithPagination />
-    </TabContaire>
-
+        <TableWithPagination />
+      </TabContaire>
     </>
   );
 }
-
 
 const TabContaire = styled.div`
   display: flex;
@@ -107,26 +128,19 @@ const TabContaire = styled.div`
   margin-bottom: 20px;
   margin-left: 20px;
   margin-right: 20px;
-  `;
-
-
-
-const ContainerGraphGlobal2 = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-width: 100%;
-background-image: url(./images/bgdh.svg);
-background-repeat: no-repeat;
-background-size: cover;
-background-position: center;
-background-opacity: 0.5;
-
 `;
 
-
-
+const ContainerGraphGlobal2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-image: url(./images/bgdh.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+`;
 
 const ContainerGraphGlobal = styled.div`
   display: flex;
@@ -139,11 +153,7 @@ const ContainerGraphGlobal = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-opacity: 0.5;
-  
-  `;
-  
-
+`;
 
 const ContainerGraph = styled.div`
   display: flex;
@@ -162,13 +172,4 @@ const ContainerGraph = styled.div`
   width: 500px;
   margin-right: 20px;
   padding: 20px;
-
-  cardGraph {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
-
 `;
