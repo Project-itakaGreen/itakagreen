@@ -1,27 +1,33 @@
 /**
  * Wath if the popup send a request to have domain's informations
  */
-export function loadInfoDomain(): void {
-  chrome.runtime.onMessage.addListener(async function (
-    request,
-    sender,
-    sendResponse
-  ) {
+export async function loadInfoDomain() {
+  chrome.runtime.onMessage.addListener(async function (request) {
     if (request.message === "domain") {
-      const r = retrieveInfoDomain();
-      r.then((res) => {
-        sendResponse(r);
-      });
+      const response = await retrieveInfoDomain();
+      chrome.runtime.sendMessage({ message: "response", value: response });
     }
   });
 }
 
 /**
+ * Return a pomise with the domain's information
+ */
+async function retrieveInfoDomain(): Promise<object | false> {
+  const domain = await getDomain();
+  if (typeof domain === "string" && domain.length > 0) {
+    const infos = await fetchDomainInfos(domain);
+    return infos;
+  }
+  return false;
+}
+
+/**
  * Get the domain of the open tab with the protocole
  */
-function getDomain(): Promise<unknown> {
+function getDomain(): Promise<string> {
   // get current tab
-  const p = new Promise((resolve, reject) => {
+  const p = new Promise<string>((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       // get domain of the tab
       const domain = new URL(tabs[0].url).origin;
@@ -34,7 +40,7 @@ function getDomain(): Promise<unknown> {
 /**
  * Call the api to get the domain's informations
  */
-async function fetchDomainInfos(domain: string) {
+async function fetchDomainInfos(domain: string): Promise<object> {
   // fetch domain infos
   return await fetch(`http://localhost:8080/api/domain/`, {
     method: "POST",
@@ -47,18 +53,4 @@ async function fetchDomainInfos(domain: string) {
     .then((data) => {
       return data;
     });
-}
-
-/**
- * Return a pomise with the domain's information
- */
-function retrieveInfoDomain(): Promise<unknown> {
-  const p = new Promise(async (resolve, reject) => {
-    const domain = await getDomain();
-    if (typeof domain === "string" && domain.length > 0) {
-      const infos = fetchDomainInfos(domain);
-      resolve(infos);
-    }
-  });
-  return p;
 }

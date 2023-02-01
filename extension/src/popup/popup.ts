@@ -7,13 +7,7 @@ function handleLogin() {
   window.open("http://localhost:8080/api/auth/google/login", "_blank");
 }
 
-// on popup open
-chrome.runtime.sendMessage({ message: "domain" }, function (response) {
-  console.log("year!");
-  console.log(typeof response);
-  response
-    .then((res: any) => res.json())
-    .then((data: any) => {
-      console.log(data);
-    });
+chrome.runtime.sendMessage({ message: "domain" });
+chrome.runtime.onMessage.addListener(function (request) {
+  console.log("request", request);
 });
