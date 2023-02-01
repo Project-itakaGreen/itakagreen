@@ -1,4 +1,7 @@
 import CardGraph from "../components/shared/CardGraph";
+import TableWithPagination from "../components/shared/TableWithPagination";
+import styled from 'styled-components';
+import React from 'react';
 
 export default function Details() {
 
@@ -61,7 +64,6 @@ export default function Details() {
     });
 
   const arrayType = ["bar", "doughnut", "pie", "line", "polarArea", "radar"];
-  const type = arrayType[Math.floor(Math.random() * arrayType.length)]; // bar doughnut pie line polarArea radar
   
   const afterBody = (context:any)=>
   {
@@ -69,10 +71,104 @@ export default function Details() {
   }
 
   return (
-    <>
-      <h1>User Details</h1>
+     <>
+      <h1>Super graph - Not for sale</h1>
+      <ContainerGraphGlobal>
+      <ContainerGraph>
+      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[0]} afterBody={afterBody}/>
+      </ContainerGraph>
+      <ContainerGraph>
+      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[1]} afterBody={afterBody}/>
+      </ContainerGraph>
+      </ContainerGraphGlobal>
+      <ContainerGraphGlobal2>
+      <ContainerGraph>
+      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[2]} afterBody={afterBody}/>
+      </ContainerGraph>
+      <ContainerGraph>
+      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type[3]} afterBody={afterBody}/>
+      </ContainerGraph>
+      </ContainerGraphGlobal2>
+      <TabContaire>
+      <TableWithPagination />
+    </TabContaire>
 
-      <CardGraph chartLabel={chartLabel} chartData={chartData} type={type} afterBody={afterBody}/>
     </>
   );
 }
+
+
+const TabContaire = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  `;
+
+
+
+const ContainerGraphGlobal2 = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+width: 100%;
+background-image: url(./images/bgdh.svg);
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center;
+background-opacity: 0.5;
+
+`;
+
+
+
+
+const ContainerGraphGlobal = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  background-image: url(./images/bgd.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-opacity: 0.5;
+  
+  `;
+  
+
+
+const ContainerGraph = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-image: url(./images/bg2.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  width: 500px;
+  margin-right: 20px;
+  padding: 20px;
+
+  cardGraph {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+
+`;

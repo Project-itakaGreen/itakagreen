@@ -1,10 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
-
-import { Repository } from 'typeorm';
-
 import { Record } from 'src/record/entities/record.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class StatsService {
@@ -16,13 +13,19 @@ export class StatsService {
   ) {}
 
   async getDomain(number: number) {
-    let requete = await this.recordRepository
+    const requete = await this.recordRepository
       .createQueryBuilder('record')
       .select('domain.name', 'domain')
-      .addSelect('SUM(record.gigaOctets * domain.co2PerGO)', 'co2')
+      .addSelect(
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
+        'co2',
+      )
       .leftJoin('record.domain', 'domain')
       .groupBy('domain.name')
-      .orderBy('SUM(record.gigaOctets * domain.co2PerGO)', 'DESC')
+      .orderBy(
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
+        'DESC',
+      )
       .limit(number)
       .getRawMany();
 
@@ -30,13 +33,12 @@ export class StatsService {
   }
 
   async getWeekStat() {
-    let requete = await this.recordRepository
+    const requete = await this.recordRepository
       .createQueryBuilder('record')
       .leftJoinAndSelect('record.domain', 'domain')
       .getMany();
 
-    // partie qui rempli un objet avec les libelles des jours et la somme des consommations
-    var daysInWeek = {
+    const daysInWeek = {
       Monday: 0,
       Tuesday: 0,
       Wednesday: 0,
@@ -45,76 +47,73 @@ export class StatsService {
       Saturday: 0,
       Sunday: 0,
     };
-
-    var options = { weekday: 'long' } as const;
-
+    const options = { weekday: 'long' } as const;
     requete.forEach((element) => {
-      let date = new Date(element.timeInterval * 1000);
-      let index = `${new Intl.DateTimeFormat('en-US', options).format(date)}`;
+      const date = new Date(element.timeInterval * 1000);
+      const index = `${new Intl.DateTimeFormat('en-US', options).format(date)}`;
       daysInWeek[index] =
         daysInWeek[index] == undefined
-          ? element.gigaOctets * element.domain.co2PerGO
-          : daysInWeek[index] + element.gigaOctets * element.domain.co2PerGO;
+          ? (element.bytes * element.domain.co2PerGO) / 1073741824
+          : daysInWeek[index] +
+            (element.bytes * element.domain.co2PerGO) / 1073741824;
     });
-    
-   var dataDaysInWeek = Object.entries(daysInWeek).map((e) => {
+    const reformatDaysInWeek = Object.entries(daysInWeek).map((el) => {
       return {
-        day: e[0],
-        co2: e[1],
+        day: el[0],
+        co2: el[1],
       };
     });
-
-    return dataDaysInWeek;
+    return reformatDaysInWeek;
   }
 
+  // partie qui rempli un objet avec les heures d'une journée et la somme des consommations
   async getHourStat() {
-    let requete = await this.recordRepository
+    const requete = await this.recordRepository
       .createQueryBuilder('record')
       .leftJoinAndSelect('record.domain', 'domain')
       .getMany();
-
-    // partie qui rempli un objet avec les heures d'une journée et la somme des consommations
-    var hourInDays = {
-        '00': 0,
-        '01': 0,
-        '02': 0,
-        '03': 0,
-        '04': 0,
-        '05': 0,
-        '06': 0,
-        '07': 0,
-        '08': 0,
-        '09': 0,
-        '10': 0,
-        '11': 0,
-        '12': 0,
-        '13': 0,
-        '14': 0,
-        '15': 0,
-        '16': 0,
-        '17': 0,
-        '18': 0,
-        '19': 0,
-        '20': 0,
-        '21': 0,
-        '22': 0,
-        '23': 0,
+    const hourInDays = {
+      '00': 0,
+      '01': 0,
+      '02': 0,
+      '03': 0,
+      '04': 0,
+      '05': 0,
+      '06': 0,
+      '07': 0,
+      '08': 0,
+      '09': 0,
+      '10': 0,
+      '11': 0,
+      '12': 0,
+      '13': 0,
+      '14': 0,
+      '15': 0,
+      '16': 0,
+      '17': 0,
+      '18': 0,
+      '19': 0,
+      '20': 0,
+      '21': 0,
+      '22': 0,
+      '23': 0,
     };
 
     requete.forEach((element) => {
-      let date = new Date(element.timeInterval * 1000);
-      let index = `${('0' + date.getHours()).slice(-2)}`;
+      const date = new Date(element.timeInterval * 1000);
+      const index = `${('0' + date.getHours()).slice(-2)}`;
       hourInDays[index] =
         hourInDays[index] == undefined
-          ? element.gigaOctets * element.domain.co2PerGO
-          : hourInDays[index] + element.gigaOctets * element.domain.co2PerGO;
+          ? (element.bytes * element.domain.co2PerGO) / 1073741824
+          : hourInDays[index] +
+            (element.bytes * element.domain.co2PerGO) / 1073741824;
     });
 
-    var dataHourInDays = Object.entries(hourInDays)
-      .map((e) => {
+    const dataHourInDays = Object.entries(hourInDays)
+      .map((el) => {
         return {
-          hour: e[0],
-          co2: e[1],
+          hour: el[0],
+          co2: el[1],
         };
       })
       .sort((a, b) => a.hour.localeCompare(b.hour));
