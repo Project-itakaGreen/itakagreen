@@ -10,9 +10,16 @@ body {
 
 }
 
-span {
+/* span {
   color: #24e357;
   font-weight: bold;
+} */
+p{
+  font-size: 14px;
+}
+.bold-info{
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .container {

@@ -37,7 +37,7 @@ async function sendStats(db: IDBDatabase) {
     });
 }
 
-function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
+export function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
   const transaction = db.transaction(["records"], "readonly");
   const objectStore = transaction.objectStore("records");
   const promiseRecords: Promise<RecordI[]> = new Promise((resolve, reject) => {

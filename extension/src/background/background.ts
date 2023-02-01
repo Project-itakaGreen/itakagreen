@@ -3,11 +3,20 @@ import { loadPopup } from "./popup";
 import { saveNavigationData } from "./saveNavigationData";
 import { loadStatsSender } from "./statsSender";
 
+let db: null | IDBDatabase;
+
 (async () => {
   loadPopup();
-  const db = await dbConnection();
+  db = await dbConnection();
   if (db instanceof IDBDatabase) {
     saveNavigationData(db);
     loadStatsSender(db);
   }
 })();
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.type === "getDb") {
+    console.log("getDbBg",db)
+    sendResponse(db);
+  }
+});
