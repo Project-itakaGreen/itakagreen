@@ -75,101 +75,102 @@ export default function Details() {
 
   return (
     <>
-      <h1>Super graph - Not for sale</h1>
-      <ContainerGraphGlobal>
-        <ContainerGraph>
-          <CardGraph
-            chartLabel={chartLabel}
-            chartData={chartData}
-            type={arrayType[0]}
-            afterBody={afterBody}
-          />
-        </ContainerGraph>
-        <ContainerGraph>
-          <CardGraph
-            chartLabel={chartLabel}
-            chartData={chartData}
-            type={arrayType[1]}
-            afterBody={afterBody}
-          />
-        </ContainerGraph>
-      </ContainerGraphGlobal>
-      <ContainerGraphGlobal2>
-        <ContainerGraph>
-          <CardGraph
-            chartLabel={chartLabel}
-            chartData={chartData}
-            type={arrayType[2]}
-            afterBody={afterBody}
-          />
-        </ContainerGraph>
-        <ContainerGraph>
-          <CardGraph
-            chartLabel={chartLabel}
-            chartData={chartData}
-            type={arrayType[3]}
-            afterBody={afterBody}
-          />
-        </ContainerGraph>
-      </ContainerGraphGlobal2>
-      <TabContaire>
-        <TableWithPagination />
-      </TabContaire>
+      <SectionGraphique>
+        <h1> Suivez votre impact numérique en détails </h1>
+        <ContainerGraphGlobal>
+          <ContainerGraph>
+            <CardGraph
+              chartLabel={chartLabel}
+              chartData={chartData}
+              type={arrayType[0]}
+              afterBody={afterBody}
+            />
+          </ContainerGraph>
+          <ContainerGraph>
+            <CardGraph
+              chartLabel={chartLabel}
+              chartData={chartData}
+              type={arrayType[1]}
+              afterBody={afterBody}
+            />
+          </ContainerGraph>
+          <ContainerGraph>
+            <CardGraph
+              chartLabel={chartLabel}
+              chartData={chartData}
+              type={arrayType[1]}
+              afterBody={afterBody}
+            />
+          </ContainerGraph>
+        </ContainerGraphGlobal>
+      </SectionGraphique>
+      <SectionTab>
+        <TabContaire>
+          <TableWithPagination />
+        </TabContaire>
+      </SectionTab>
     </>
   );
 }
 
-const TabContaire = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-`;
-
-const ContainerGraphGlobal2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background-image: url(./images/bgdh.svg);
+const SectionTab = styled.div`
+  background-image: url("./images/bgs2.svg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+
+}
+`;
+
+const SectionGraphique = styled.div`
+  background-image: url("./images/bgs1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  h1 {
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    padding-top: 120px;
+    padding-bottom: 70px;
+  }
+`;
+
+const TabContaire = styled.div`
+  width: 70%;
+  height: auto;
+  margin-left: 50px;
+  margin-right: 50px;
+  background-color: #e8fceb;
+  border: 1px solid green;
+  border-radius: 10px 10px 0px 0px;
 `;
 
 const ContainerGraphGlobal = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
-  margin-top: 20px;
   width: 100%;
-  background-image: url(./images/bgd.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  height: 100vh;
 `;
 
 const ContainerGraph = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 20px;
+
   margin-right: 20px;
-  background-image: url(./images/bg2.svg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background-color: white;
+  border: 1px solid green;
   border-radius: 10px;
   width: 500px;
-  margin-right: 20px;
-  padding: 20px;
+  height: 500px;
+  margin: 20px;
 `;
