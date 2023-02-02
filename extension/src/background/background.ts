@@ -8,6 +8,6 @@ import { loadStatsSender } from './statsSender';
   if (db instanceof IDBDatabase) {
     saveNavigationData(db);
     loadStatsSender(db);
-    loadInfoDomain();
+    loadInfoDomain(db);
   }
 })();

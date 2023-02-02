@@ -55,6 +55,7 @@ const Container = styled.div`
 
 
 export default function Home({auth2Token}:any) {
+  return(
   <Container>
 
     <LeftContainer>
@@ -70,7 +71,7 @@ export default function Home({auth2Token}:any) {
   </Container>
 
 );
-
+}
 export async function getServerSideProps(context: { req: { headers: { cookie: string } } }) {
   const cookie =  context.req.headers?.cookie;
   let auth2Token = "";

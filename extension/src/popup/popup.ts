@@ -1,3 +1,4 @@
+import type { DomainI } from "../interfaces/DomainI";
 // ---------------- POPUP INTERACT ----------------
 const loginButton = document.getElementById("google-login-button");
 
@@ -9,5 +10,17 @@ function handleLogin() {
 
 chrome.runtime.sendMessage({ message: "domain" });
 chrome.runtime.onMessage.addListener(function (request) {
-  console.log("request", request);
+  if (request.message === "response") {
+    handleDomain(request.value);
+  }
 });
+
+function handleDomain(domain: DomainI | false) {
+  if (domain === false) {
+    console.log("domain invalid"); // ex: chrome pages
+  } else if (domain.renewable === true) {
+    console.log("this domain use renewable energie");
+  } else {
+    console.log("this domain use non renewable energie");
+  }
+}
