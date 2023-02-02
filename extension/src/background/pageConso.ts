@@ -1,41 +1,53 @@
-const tabWatched: Array<any> = [];
+import { registerNavigationObserverCallback } from './navigationObserver';
+
+import type { navigationObserverCallback } from "./navigationObserver";
+
+const tabWatched: Array<{
+  tabId: number;
+  domainName: string;
+  totalConsoBytes: number;
+}> = [];
 
 /**
- * Send to popup actual all request on page
+ * Init the watchers to send the tabs's conso to the popup when needed
+ */
+export function initPageConso() {
+  registerNavigationObserverCallback(watchTab);
+  chrome.runtime.onMessage.addListener(async function (request) {
+    if (request.message === "getPageConso") {
+      sendToPopup("updatePageConso", tabWatched);
+    }
+  });
+}
+
+/**
+ * Register the sum of all tabs data usage;
+ */
+const watchTab: navigationObserverCallback = function (details) {
+  let workingTab = tabWatched.find((e) => e.tabId === details.tabId);
+  if (workingTab) {
+    if (workingTab.domainName === details.domainName) {
+      workingTab.totalConsoBytes += details.responseSize;
+    } else {
+      workingTab.totalConsoBytes = details.responseSize;
+      workingTab.domainName = details.domainName;
+    }
+  } else {
+    workingTab = {
+      tabId: details.tabId,
+      domainName: details.domainName,
+      totalConsoBytes: details.responseSize,
+    };
+    tabWatched.push(workingTab);
+  }
+  sendToPopup("updatePageConso", tabWatched);
+};
+
+/**
+ * Send all tab/domain data usage
  */
 function sendToPopup(message: string, data: any): void {
   chrome.runtime.sendMessage({ message: message, data: data }).catch((e) => {
     //popup closed
   });
 }
-
-export function watchTab(
-  responseSize: number,
-  domainName: string,
-  details: any
-) {
-  let workingTab = tabWatched.find((e) => e.tabId === details.tabId);
-  if (workingTab) {
-    if (workingTab.domainName === domainName) {
-      workingTab.totalConsoBytes += responseSize;
-    } else {
-      workingTab.totalConsoBytes = responseSize;
-      workingTab.domainName = domainName;
-    }
-  } else {
-    workingTab = {
-      tabId: details.tabId,
-      domainName,
-      totalConsoBytes: responseSize,
-    };
-    tabWatched.push(workingTab);
-  }
-  sendToPopup("updatePageConso", tabWatched);
-}
-
-chrome.runtime.onMessage.addListener(async function (request) {
-  if (request.message === "getPageConso") {
-    //getPageConso
-    sendToPopup("updatePageConso", tabWatched);
-  }
-});

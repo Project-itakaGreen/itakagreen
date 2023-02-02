@@ -1,5 +1,8 @@
-import { Buffer } from "buffer";
+import { Buffer } from 'buffer';
 
+/**
+ * Get the api token from the cookies
+ */
 export function getToken(): Promise<unknown> {
   const p = new Promise((resolve, reject) => {
     chrome.cookies.get(
@@ -16,14 +19,17 @@ export function getToken(): Promise<unknown> {
   return p;
 }
 
+/**
+ * Test the JWT validity
+ */
 export function isTokenValid(token: unknown): boolean {
   if (typeof token !== "string") {
-    console.log("the token does not exist");
+    console.log("token| the token does not exist");
     return false;
   }
   const splitedToken = token.split(".");
   if (splitedToken.length !== 3) {
-    console.log("the token is not valid");
+    console.log("token| the token is not valid");
     return false;
   }
 
@@ -32,7 +38,7 @@ export function isTokenValid(token: unknown): boolean {
   try {
     payload = JSON.parse(rawPayload);
   } catch {
-    console.log("the token is not valid");
+    console.log("token| the token is not valid");
     return false;
   }
 
@@ -43,12 +49,12 @@ export function isTokenValid(token: unknown): boolean {
   const initialDuration = iat - now;
 
   if (exp <= now) {
-    console.log("token expired");
+    console.log("token| token expired");
     return false;
   } else if (timeLeft < initialDuration / 2) {
-    console.log("token will expire soon");
+    console.log("token| the token will expire soon");
   } else {
-    console.log("token is valid");
+    console.log("token| the token is valid");
   }
   return true;
 }

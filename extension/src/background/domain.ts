@@ -4,6 +4,7 @@ let db: IDBDatabase;
 
 /**
  * Watch if the popup send a request to have domain's informations
+ * and sent it back
  */
 export function loadInfoDomain(dbConnection: IDBDatabase): void {
   db = dbConnection;
@@ -13,7 +14,9 @@ export function loadInfoDomain(dbConnection: IDBDatabase): void {
       chrome.runtime
         .sendMessage({ message: "sendDomain", value: response })
         .catch((e) => {
-          console.error("popup has been closed before get response");
+          console.warn(
+            "domain| popup has been closed before getting a response"
+          );
         });
     }
   });
@@ -51,10 +54,10 @@ function getDomain(): Promise<string | false> {
 async function getDomainInfos(domain: string): Promise<DomainI | false> {
   const domainInfos = await getDomainFromDB(domain);
   if (domainInfos) {
-    console.log("domainInfos found in local");
+    console.log("domain| domainInfos found in local");
     return domainInfos;
   }
-  console.log("domainInfos not found in local");
+  console.log("domain| domainInfos not found in local");
   const infos = await fetchDomainInfos(domain);
   if (infos !== false) {
     setDomainInDB(domain, infos);
@@ -100,7 +103,7 @@ async function setDomainInDB(
       domainInformations: serializedDomainInformations,
     });
     request.onsuccess = function (event: Event) {
-      console.log("domain infos saved in local");
+      console.log("domain| domain infos saved in local");
       resolve();
     };
   });
@@ -112,7 +115,7 @@ async function setDomainInDB(
  */
 async function fetchDomainInfos(domain: string): Promise<DomainI | false> {
   // fetch domain infos
-  console.log("fetch domain infos");
+  console.log("domain| fetch domain infos");
   return await fetch(process.env.API_URL + `/domain/`, {
     method: "POST",
     headers: {

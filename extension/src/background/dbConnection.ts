@@ -1,8 +1,11 @@
-export function dbConnection(): Promise<IDBDatabase | any> {
+/**
+ * Return the DB connection, update the db if needed
+ */
+export function dbConnection(): Promise<IDBDatabase | unknown> {
   return new Promise((resolve, reject) => {
     const DBOpenRequest = indexedDB.open("records", 16);
     DBOpenRequest.onerror = () => {
-      console.error("error opening db");
+      console.error("dbConnection| error opening db");
       reject();
     };
 

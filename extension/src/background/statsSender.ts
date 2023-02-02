@@ -1,6 +1,10 @@
-import { getToken, isTokenValid } from "./token";
+import { getToken, isTokenValid } from './token';
 
 import type { RecordI } from "../interfaces/RecordI";
+
+/**
+ * Send the conso to the server regulary
+ */
 export async function loadStatsSender(db: IDBDatabase) {
   // todo remove the remove
   chrome.storage.local.remove("lastSynchronizationDate");
@@ -16,6 +20,9 @@ export async function loadStatsSender(db: IDBDatabase) {
   }
 }
 
+/**
+ * Send the conso to the server
+ */
 async function sendStats(db: IDBDatabase, token: string) {
   const records = (await getAllRecords(db)) as RecordI[];
 
@@ -30,18 +37,21 @@ async function sendStats(db: IDBDatabase, token: string) {
   })
     .then(function (response) {
       if (response.ok) {
-        console.log("Stats sent");
+        console.log("statsSender| Stats sent");
         clearDb(db);
         updateLastStatsSend();
       } else {
-        throw new Error("The backend send an error.");
+        throw new Error("statsSender| The backend send an error.");
       }
     })
     .catch(function (error) {
-      console.warn("Error while sending stats: " + error);
+      console.warn("statsSender| Error while sending stats: " + error);
     });
 }
 
+/**
+ * Get the conso records from the local indexedDb
+ */
 function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
   const transaction = db.transaction(["records"], "readonly");
   const objectStore = transaction.objectStore("records");
@@ -51,7 +61,7 @@ function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
       resolve(request.result);
     };
     request.onerror = function (event: Event) {
-      console.error("Error while getting all records");
+      console.error("statsSender| Error while getting all records");
       reject([]);
     };
   });
@@ -60,14 +70,14 @@ function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
 }
 
 /**
- * Delete all the records
+ * Delete all the records from the local indexedDB
  */
 function clearDb(db: IDBDatabase) {
   const transaction = db.transaction(["records"], "readwrite");
   const objectStore = transaction.objectStore("records");
   const request = objectStore.clear();
   request.onsuccess = function (event) {
-    console.log("DB cleared");
+    console.log("statsSender| DB cleared");
   };
 }
 
@@ -86,12 +96,12 @@ function updateLastStatsSend() {
 /**
  * Return if the data should be send as a boolean
  */
-function shouldSendStats(): Promise<boolean | any> {
+function shouldSendStats(): Promise<boolean> {
   const date = new Date();
   date.setHours(0, 0, 0, 0);
   const dayInMs = date.getTime();
 
-  return new Promise((resolve, reject) => {
+  return new Promise<boolean>((resolve, reject) => {
     chrome.storage.local.get("lastSynchronizationDate", function (result) {
       resolve(result.lastSynchronizationDate != dayInMs);
     });
@@ -99,16 +109,18 @@ function shouldSendStats(): Promise<boolean | any> {
 }
 
 /**
- * log the syncronisation to the server
+ * log the synchronisation to the server
  */
 function logLastSynchronisation() {
   chrome.storage.local.get("lastSynchronizationDate", function (result) {
     if (!result.lastSynchronizationDate) {
-      console.log("There are no synchronization registred in the logs");
+      console.log(
+        "statsSender| There are no synchronization registred in the logs"
+      );
     } else {
       const date = new Date(result.lastSynchronizationDate);
       console.log(
-        "lastSynchronizationDate from " +
+        "statsSender| lastSynchronizationDate from " +
           date.getDate() +
           "/" +
           date.getMonth() +

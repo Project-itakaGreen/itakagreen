@@ -1,15 +1,17 @@
-import { dbConnection } from "./dbConnection";
-import { loadInfoDomain } from "./domain";
-import { saveNavigationData } from "./saveNavigationData";
-import { loadStatsSender } from "./statsSender";
-
-let db: null | IDBDatabase;
+import { dbConnection } from './dbConnection';
+import { loadInfoDomain } from './domain';
+import { loadNavigationObserver } from './navigationObserver';
+import { initNavigationRegistrer } from './navigationRegistrer';
+import { initPageConso } from './pageConso';
+import { loadStatsSender } from './statsSender';
 
 (async () => {
-  db = await dbConnection();
+  const db = await dbConnection();
+  loadNavigationObserver();
   if (db instanceof IDBDatabase) {
-    saveNavigationData(db);
+    initNavigationRegistrer(db);
     loadStatsSender(db);
     loadInfoDomain(db);
+    initPageConso();
   }
 })();
