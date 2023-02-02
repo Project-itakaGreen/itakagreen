@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Domain {
@@ -15,6 +10,9 @@ export class Domain {
 
   @Column('double precision')
   co2PerGO: number;
+
+  @Column('bool')
+  renewable: boolean;
 
   @UpdateDateColumn()
   updatedAt: Date;

@@ -1,4 +1,5 @@
 import type { RecordI } from "./interfaces/RecordI";
+import type { RecordI } from "../interfaces/RecordI";
 
 let db: null | IDBDatabase;
 
@@ -48,7 +49,7 @@ async function saveData(
 
   const request = index.get([domainName, currentInterval]);
   request.onsuccess = function (event: Event) {
-    const record = request.result; 
+    const record = request.result;
     if (!record) {
       addRecord(objectStore, domainName, currentInterval, responseSize);
     } else {
@@ -71,7 +72,7 @@ function addRecord(
     timeInterval: timeInterval,
     bytes: size,
   };
-  chrome.runtime.sendMessage({type:"sendNewRecordSize",data:record.bytes});
+
   const request = objectStore.add(record);
   request.onsuccess = function (event: Event) {
     console.log("record added");
@@ -87,7 +88,6 @@ function updateRecord(
   size: number
 ) {
   record.bytes += size;
-  chrome.runtime.sendMessage({type:"sendNewRecordSize",data:record.bytes});
   const request = objectStore.put(record);
   request.onsuccess = function (event: Event) {
     console.log("record updated");
@@ -102,7 +102,7 @@ function updateRecord(
  * As a interval is one houre long, this function
  * return the timestamp for the start of the current hour.
  */
-export function getTimeIntervalStart(): number {
+function getTimeIntervalStart(): number {
   const date = new Date();
   date.setMinutes(0, 0, 0);
   return date.getTime() / 1000;

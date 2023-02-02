@@ -1,41 +1,53 @@
-// init the data of api for the active tab
-export let activeSiteDomain: string | null = null;
+// init the data of api for the active tab  
+let activeSiteData = null;
 // init the last origin url
 let lastOriginUrl = "";
 
+
 export function loadPopup() {
-  // check if the extension is installed or updated
-  chrome.runtime.onInstalled.addListener(function () {
-    console.log("Extension has been installed");
-  });
+	// check if the extension is installed or updated
+	chrome.runtime.onInstalled.addListener(function () {
+		console.log("Extension has been installed");
+	});
 
-  // get the url of the active tab
-  chrome.tabs.onActivated.addListener(function (activeInfo) {
-    chrome.tabs.get(activeInfo.tabId, function (tab) {
-      activeSiteDomain = getOrigineFromUrl(tab.url);
-    });
-  });
+	// get the url of the active tab
+	chrome.tabs.onActivated.addListener(function (activeInfo) {
+		chrome.tabs.get(activeInfo.tabId, function (tab) {
+			const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
+		});
+	});
 
-  // get the url of loaded tab
-  chrome.tabs.onUpdated.addListener(function (tabId: number, changeInfo, tab) {
-    activeSiteDomain = getOrigineFromUrl(tab.url);
-  });
-
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse
-  ) {
-    if (request.type === "getActiveSiteDomain") {
-      sendResponse({ activeSiteDomain: activeSiteDomain });
-    }
-  });
+	// get the url of loaded tab 
+	chrome.tabs.onUpdated.addListener(function (tabId: number, changeInfo, tab) {
+		const activeSiteData = getDomainData(getOrigineFromUrl(tab.url));
+	});
 }
 
 // get the origin of the url
 function getOrigineFromUrl(url: string) {
-  if (url.indexOf("chrome://") != 0 && url.length != 0) {
-    const parsedUrl = new URL(url);
-    return parsedUrl.origin;
-  }
+	if (url.indexOf("chrome://") != 0 && url.length != 0) {
+		const parsedUrl = new URL(url);
+		return parsedUrl.origin;
+	}
 }
+
+//verify if the url is the same as the last one
+function getDomainData(originUrl: string) {
+	if (originUrl != lastOriginUrl && originUrl != undefined) {
+		lastOriginUrl = originUrl;
+		// TODO: call api
+		console.log("call api with :" + originUrl);
+		return {}; //object with the data of api
+	}
+}
+chrome.cookies.get({url: process.env.FRONT_URL, name: "auth2"}, function(cookie) {
+    if(cookie) {
+        // use the cookie value here
+        console.log(cookie.value);
+    } else {
+        console.log("Cookie not found");
+    }
+});
+// chrome.cookies.getAll({domain: "https://your-api-url.com/"}, function(cookies) {
+//     console.log(cookies);
+// });

@@ -1,25 +1,30 @@
-import type { RecordI } from "./interfaces/RecordI";
+import { getToken, isTokenValid } from './token';
 
+import type { RecordI } from "../interfaces/RecordI";
 export async function loadStatsSender(db: IDBDatabase) {
   // todo remove the remove
   chrome.storage.local.remove("lastSynchronizationDate");
   logLastSynchronisation();
-  const bool = await shouldSendStats();
-  if (bool) {
-    sendStats(db);
+
+  const isTime = await shouldSendStats();
+  if (!isTime) return;
+
+  const token = await getToken();
+
+  if (isTokenValid(token)) {
+    sendStats(db, token as string);
   }
 }
 
-async function sendStats(db: IDBDatabase) {
+async function sendStats(db: IDBDatabase, token: string) {
   const records = (await getAllRecords(db)) as RecordI[];
 
-  // todo use the conection
-  const idUser = 2;
-  const urlSendpoint = "http://localhost:8080/api/record/many/" + idUser;
+  const urlSendpoint = process.env.API_URL + "/record/many/";
   fetch(urlSendpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
     body: JSON.stringify(records),
   })
@@ -37,7 +42,7 @@ async function sendStats(db: IDBDatabase) {
     });
 }
 
-export function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
+function getAllRecords(db: IDBDatabase): Promise<RecordI[]> {
   const transaction = db.transaction(["records"], "readonly");
   const objectStore = transaction.objectStore("records");
   const promiseRecords: Promise<RecordI[]> = new Promise((resolve, reject) => {

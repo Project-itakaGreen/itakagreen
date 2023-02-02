@@ -1,11 +1,10 @@
 import { IsInt, IsUrl } from 'class-validator';
 
-
 export class CreateRecordDto {
   @IsUrl({
-    protocols: ['http','https'],
+    protocols: ['http', 'https'],
     require_protocol: true,
-    allow_query_components: false
+    allow_query_components: false,
   })
   domainName: string;
 

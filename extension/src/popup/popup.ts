@@ -1,9 +1,6 @@
-import { getTimeIntervalStart } from "../background/saveNavigationData";
-
 // ---------------- POPUP INTERACT ---------------- //
-let activeSiteDomain = "";
-let db: null | IDBDatabase;
 // Google connection
+import type { DomainI } from "../interfaces/DomainI";
 const loginButton = document.getElementById("google-login-button");
 if (loginButton) {
   loginButton.addEventListener("click", () => {
@@ -11,6 +8,12 @@ if (loginButton) {
   });
 }
 
+chrome.runtime.sendMessage({ message: "domain" });
+chrome.runtime.onMessage.addListener(function (request) {
+  if (request.message === "response") {
+    handleDomain(request.value);
+  }
+});
 // Get cookie + load second popup if token exist
 chrome.cookies.get(
   { url: process.env.FRONT_URL, name: "auth2" },
@@ -27,6 +30,15 @@ chrome.cookies.get(
       };
       xhr.send();
 
+function handleDomain(domain: DomainI | false) {
+  if (domain === false) {
+    console.log("domain invalid"); // ex: chrome pages
+  } else if (domain.renewable === true) {
+    console.log("this domain use renewable energie");
+  } else {
+    console.log("this domain use non renewable energie");
+  }
+}
       // if(!db){
       //   chrome.runtime.sendMessage(
       //     { type: "getDb" },
