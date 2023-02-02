@@ -8,6 +8,9 @@ const nextConfig = {
       aggregateTimeout: 300,   // delay before rebuilding
     };
     return config;
+  },
+  env: {
+    BACK_URL: process.env.BACK_URL
   }
 }
 
