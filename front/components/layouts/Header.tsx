@@ -1,28 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 interface Props {}
 
 const HeaderContainer = styled.header`
-    padding: 20px;
-    width: 100%;
-    height: 60px;
-    background: none;
-    display: flex;
-    background-color: #009245;
-    align-items: center;
-    z-index: 1;
-    position: fixed;
-
-
- 
-   
-
+  padding: 20px;
+  width: 100%;
+  height: 60px;
+  background: none;
+  display: flex;
+  background-color: #0a7c38;
+  align-items: center;
+  z-index: 1;
+  position: fixed;
 `;
 const Logo = styled.img`
-    margin-right: 25%;
-   
-  
+  margin-right: 25%;
 `;
 
 const HeaderLink = styled.a`
@@ -43,7 +36,7 @@ const HeaderLink = styled.a`
     border: 2px solid white;
     transform: scale(0);
     transition: all 0.3s ease-in-out 0s;
-    border-radius: 50% 30% 0 50%;
+    border-radius: 50% 40% 10% 50%;
   }
 
   &:hover:after {
@@ -51,12 +44,10 @@ const HeaderLink = styled.a`
   }
 `;
 
-
-
 const Header: React.FC<Props> = () => {
   return (
     <HeaderContainer>
-      <Logo src="./images/logoW.svg" alt="Logo"/>
+      <Logo src="./images/logoW.svg" alt="Logo" />
       <nav>
         <HeaderLink href="/">Accueil</HeaderLink>
         <HeaderLink href="/details">Détails</HeaderLink>
@@ -64,6 +55,6 @@ const Header: React.FC<Props> = () => {
       </nav>
     </HeaderContainer>
   );
-}
+};
 
 export default Header;
