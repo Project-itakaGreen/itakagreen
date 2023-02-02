@@ -1,4 +1,5 @@
 import { dbConnection } from './dbConnection';
+import { loadInfoDomain } from './domain';
 import { loadPopup } from './popup';
 import { saveNavigationData } from './saveNavigationData';
 import { loadStatsSender } from './statsSender';

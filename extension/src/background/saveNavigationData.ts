@@ -1,4 +1,3 @@
-import type { RecordI } from "./interfaces/RecordI";
 import type { RecordI } from "../interfaces/RecordI";
 
 let db: null | IDBDatabase;

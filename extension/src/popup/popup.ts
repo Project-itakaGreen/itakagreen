@@ -1,6 +1,8 @@
+import type { DomainI } from "../interfaces/DomainI";
+
 // ---------------- POPUP INTERACT ---------------- //
 // Google connection
-import type { DomainI } from "../interfaces/DomainI";
+
 const loginButton = document.getElementById("google-login-button");
 if (loginButton) {
   loginButton.addEventListener("click", () => {
@@ -8,7 +10,15 @@ if (loginButton) {
   });
 }
 
-chrome.runtime.sendMessage({ message: "domain" });
+function handleDomain(domain: DomainI | false) {
+  if (domain === false) {
+    console.log("domain invalid"); // ex: chrome pages
+  } else if (domain.renewable === true) {
+    console.log("this domain use renewable energie");
+  } else {
+    console.log("this domain use non renewable energie");
+  }
+}
 chrome.runtime.onMessage.addListener(function (request) {
   if (request.message === "response") {
     handleDomain(request.value);
@@ -30,15 +40,9 @@ chrome.cookies.get(
       };
       xhr.send();
 
-function handleDomain(domain: DomainI | false) {
-  if (domain === false) {
-    console.log("domain invalid"); // ex: chrome pages
-  } else if (domain.renewable === true) {
-    console.log("this domain use renewable energie");
-  } else {
-    console.log("this domain use non renewable energie");
-  }
-}
+      // chrome.runtime.sendMessage({ message: "domain" });
+     
+
       // if(!db){
       //   chrome.runtime.sendMessage(
       //     { type: "getDb" },
@@ -79,16 +83,16 @@ function handleDomain(domain: DomainI | false) {
   }
 );
 
-// if new size if second popup  already open
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === "sendNewRecordSize") {
-    const sizeBytes: string = request.data || "0";
-    document.getElementById("conso-site").innerHTML = sizeBytes;
-  }
-});
+// // if new size if second popup  already open
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   if (request.type === "sendNewRecordSize") {
+//     const sizeBytes: string = request.data || "0";
+//     document.getElementById("conso-site").innerHTML = sizeBytes;
+//   }
+// });
 
-chrome.runtime.sendMessage({ type: "getDb" }, function (response) {
-  let getDb = response;
-  console.log("yayy", getDb);
-  // db = getDb;
-});
+// chrome.runtime.sendMessage({ type: "getDb" }, function (response) {
+//   let getDb = response;
+//   console.log("yayy", getDb);
+//   // db = getDb;
+// });
