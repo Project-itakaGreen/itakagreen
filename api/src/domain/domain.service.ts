@@ -52,8 +52,8 @@ export class DomainService {
       // https://sustainablewebdesign.org/calculating-digital-emissions/
       const carbonFactor = 442;
       const tWhGo = 0.81;
-      gco2ByGO = tWhGo * carbonFactor; 
-      renewable = false
+      gco2ByGO = tWhGo * carbonFactor;
+      renewable = false;
     }
 
     const newDomain = new Domain();

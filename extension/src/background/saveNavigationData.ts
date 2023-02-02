@@ -52,7 +52,6 @@ async function saveData(
 
   request.onsuccess = function (event: Event) {
     const record = request.result;
-    console.log("record?", record);
     if (!record) {
       addRecord(objectStore, domainName, currentInterval, responseSize);
     } else {
