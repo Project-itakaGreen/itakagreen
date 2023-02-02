@@ -81,7 +81,7 @@ const TableWithPagination = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
 
-  const handlePageClick = (page) => {
+  const handlePageClick = (page :any) => {
     setCurrentPage(page);
   };
 
