@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ConsoService } from './conso.service';
 
@@ -47,16 +47,16 @@ export class ConsoController {
       period ?? DEFAULT_DAYS_PERIOD,
     );
   }
-  
   @UseGuards(JwtAuthGuard)
-  @Patch('delete_domain/:id')
+  @Delete('delete')
+  deleteUserAllRecords(@Req() req) {
+    return this.consoService.deleteUserConso(+req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
   deleteUserOnSpecificRecord(@Param('id') domainId: number, @Req() req) {
     return this.consoService.deleteUserOnSpecificRecord(domainId, +req.user.id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Patch('delete')
-  deleteUserAllRecords(@Req() req) {
-    return this.consoService.deleteUserConso(+req.user.id);
-  }
 }

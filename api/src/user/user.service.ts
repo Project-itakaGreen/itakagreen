@@ -34,10 +34,10 @@ export class UserService {
     .set({ email: null, googleId: null })
     .where("id = :id", { id })
     .execute();
-    return `This action updates a #${id} user`;
+    return {status: `200`, msg: `This action updates a #${id} user`};
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return {status: `200`, msg: `This action removes all info associated to the #${id} user`};
   }
 }

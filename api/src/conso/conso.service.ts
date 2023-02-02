@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Record } from 'src/record/entities/record.entity';
 import { User } from './../user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { Sum } from 'utils/calcul-helper';
+import { sum } from 'utils/calcul-helper';
 
 @Injectable()
 export class ConsoService {
@@ -128,7 +128,7 @@ export class ConsoService {
       };
     });
     reformatLastWeek.forEach((element) => {
-      element['totalCo2'] = Sum(element.domains, 'co2');
+      element['totalCo2'] = sum(element.domains, 'co2');
     });
     return reformatLastWeek;
   }
@@ -167,7 +167,7 @@ export class ConsoService {
     .where("userId = :userId", {userId})
     .andWhere("domainId = :domainId", {domainId})
     .execute();
-    return `This action delete the association user #${userId} / domain #${domainId} from record `
+    return {status: `200`, msg: `This action delete the association user #${userId} / domain #${domainId} from record`};
   }
 
   async deleteUserConso(userId: number) {
@@ -177,6 +177,6 @@ export class ConsoService {
     .set({user: null})
     .where("userId = :userId", {userId})
     .execute();
-    return `This action delete the user #${userId} from all record`
+    return {status: `200`, msg:`This action delete the user #${userId} from all record`}
   }
 }

@@ -37,7 +37,7 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch()
+  @Delete()
   updateDissociateUser(@Req() req) {
     return this.userService.updateDissociateUser(+req.user.id);
   }
