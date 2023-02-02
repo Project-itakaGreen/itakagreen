@@ -1,6 +1,6 @@
 export function dbConnection(): Promise<IDBDatabase | any> {
   return new Promise((resolve, reject) => {
-    const DBOpenRequest = indexedDB.open("records", 15);
+    const DBOpenRequest = indexedDB.open("records", 16);
     DBOpenRequest.onerror = () => {
       console.error("error opening db");
       reject();

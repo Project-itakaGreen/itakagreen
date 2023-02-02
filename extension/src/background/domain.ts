@@ -8,9 +8,13 @@ let db: IDBDatabase;
 export function loadInfoDomain(dbConnection: IDBDatabase): void {
   db = dbConnection;
   chrome.runtime.onMessage.addListener(async function (request) {
-    if (request.message === "domain") {
+    if (request.message === "getDomain") {
       const response = await retrieveInfoDomain();
-      chrome.runtime.sendMessage({ message: "response", value: response });
+      try {
+        chrome.runtime.sendMessage({ message: "sendDomain", value: response });
+      } catch (Error){
+    
+      }
     }
   });
 }
@@ -18,7 +22,7 @@ export function loadInfoDomain(dbConnection: IDBDatabase): void {
 /**
  * Return a pomise with the domain's informations
  */
-async function retrieveInfoDomain(): Promise<DomainI | false> {
+export async function retrieveInfoDomain(): Promise<DomainI | false> {
   const domain = await getDomain();
   if (typeof domain === "string" && domain.length > 0) {
     return await getDomainInfos(domain);
@@ -29,7 +33,7 @@ async function retrieveInfoDomain(): Promise<DomainI | false> {
 /**
  * Get the domain of the open tab with the protocole
  */
-function getDomain(): Promise<string> {
+function getDomain(): Promise<string|false> {
   // get current tab
   const p = new Promise<string>((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

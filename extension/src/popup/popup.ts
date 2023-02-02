@@ -1,5 +1,7 @@
 import type { DomainI } from "../interfaces/DomainI";
 
+let actualDomain: any = null;
+const bytesToGO = 1_073_741_824;
 // ---------------- POPUP INTERACT ---------------- //
 // Google connection
 
@@ -13,17 +15,16 @@ if (loginButton) {
 function handleDomain(domain: DomainI | false) {
   if (domain === false) {
     console.log("domain invalid"); // ex: chrome pages
+    actualDomain = null;
+    return;
   } else if (domain.renewable === true) {
     console.log("this domain use renewable energie");
   } else {
     console.log("this domain use non renewable energie");
   }
+  actualDomain = domain;
 }
-chrome.runtime.onMessage.addListener(function (request) {
-  if (request.message === "response") {
-    handleDomain(request.value);
-  }
-});
+
 // Get cookie + load second popup if token exist
 chrome.cookies.get(
   { url: process.env.FRONT_URL, name: "auth2" },
@@ -39,60 +40,49 @@ chrome.cookies.get(
         }
       };
       xhr.send();
-
-      // chrome.runtime.sendMessage({ message: "domain" });
-     
-
-      // if(!db){
-      //   chrome.runtime.sendMessage(
-      //     { type: "getDb" },
-      //     function (response) {
-      //       let getDb= response
-      //       console.log("yayy",getDb)
-      //       // db = getDb;
-      //     }
-      //   );
-      // }
-
-      // Get actual domain name
-      // chrome.runtime.sendMessage(
-      //   { type: "getActiveSiteDomain" },
-      //   async function (response) {
-      //     activeSiteDomain = response.activeSiteDomain;
-      //     console.log("domain:", activeSiteDomain);
-      //     console.log("a");
-      //     // Test if innoDb loaded
-      //     if (db instanceof IDBDatabase) {
-      //       //Get
-      //       console.log("b");
-      //       const transaction = db.transaction(["records"], "readwrite");
-      //       const objectStore = transaction.objectStore("records");
-      //       const currentInterval = getTimeIntervalStart();
-      //       const index = objectStore.index("key");
-      //       const request = index.get([activeSiteDomain, currentInterval]);
-
-      //       request.onsuccess = function (event: Event) {
-      //         const record = request.result;
-      //         const sizeBytes: string = record.bytes || "0";
-      //         document.getElementById("conso-site").innerText = sizeBytes;
-      //       };
-      //     }
-      //   }
-      // );
+      try {chrome.runtime.sendMessage({ message: "getDomain" }).then(()=>{
+        chrome.runtime.sendMessage({ message: "getPageConso" })
+      })} catch (e){}
+      
     }
   }
 );
 
-// // if new size if second popup  already open
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   if (request.type === "sendNewRecordSize") {
-//     const sizeBytes: string = request.data || "0";
-//     document.getElementById("conso-site").innerHTML = sizeBytes;
-//   }
-// });
 
-// chrome.runtime.sendMessage({ type: "getDb" }, function (response) {
-//   let getDb = response;
-//   console.log("yayy", getDb);
-//   // db = getDb;
-// });
+chrome.runtime.onMessage.addListener(function (request) {
+  if (request.message === "sendDomain") {
+    handleDomain(request.value);
+  }
+});
+
+// if new size if second popup  already open
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.message === "updatePageConso") {
+    if (actualDomain) {
+      console.log("request.data",request.data);
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        console.log("query",tabs)
+        const activeTabId = tabs[0].id;
+        const activePageData = request.data.find(
+          (saveTab: any) => saveTab.tabId === activeTabId
+        );
+        console.log(activePageData);
+        const consoCo2 =
+          Math.floor(
+            ((activePageData.totalConsoBytes * actualDomain.co2PerGO) /
+              bytesToGO) *
+              100
+          ) / 100;
+        document.getElementById("conso-site-co2").innerText = String(consoCo2);
+      });
+    }
+
+    // if (actualDomain) {
+    //   const updatePageConsoBytes = request.data.bytes || 0;
+    //   const consoCo2 = Math.floor(
+    //     ((updatePageConsoBytes * actualDomain.co2PerGO) / bytesToGO) * 100
+    //   ) / 100
+    //   document.getElementById("conso-site-co2").innerText = String(consoCo2);
+    // }
+  }
+});

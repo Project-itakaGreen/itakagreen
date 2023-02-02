@@ -1,4 +1,5 @@
 import type { RecordI } from "../interfaces/RecordI";
+import { watchTab } from "./pageConso";
 
 let db: null | IDBDatabase;
 
@@ -16,12 +17,12 @@ export function saveNavigationData(dbConnection: IDBDatabase) {
 
       const responseSize = parseInt(contentLengthHeader.value);
       const currentInterval = getTimeIntervalStart();
-
-      if (details.initiator.startsWith("chrome-extension://")) {
+      if (!details || details?.initiator?.startsWith("chrome-extension://")) {
         return;
       }
 
       let domainName = details.initiator || details.url;
+      watchTab(responseSize, domainName, details);
       saveData(responseSize, currentInterval, domainName);
     },
     {
@@ -71,7 +72,7 @@ function addRecord(
     timeInterval: timeInterval,
     bytes: size,
   };
-
+ 
   const request = objectStore.add(record);
   request.onsuccess = function (event: Event) {
     console.log("record added");
