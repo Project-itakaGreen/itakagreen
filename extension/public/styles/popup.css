@@ -24,7 +24,7 @@ p{
 
 .container {
 
-  background-image: url('D:/it_intersession/handson-2023-1-equipe-3/extension/public/images/BgExtension.svg');
+  background-image: url('../images/BgExtension.svg');
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 15px 0px 15px 15px;
