@@ -1,6 +1,7 @@
+import axios from "axios";
+import router from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
-
 
 const Table = styled.table`
   width: 100%;
@@ -66,12 +67,16 @@ const ButtonDelete = styled.button`
   }
 `;
 
-const TableWithPagination = ({data, dataTotal}:any) => {
+const PopupRecord = styled.button`
+ 
+`;
 
+
+const TableWithPagination = ({ data, dataTotal, auth }: any) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
-
-  const handlePageClick = (page :any) => {
+  const backUrl = process.env.BACK_URL;
+  const handlePageClick = (page: any) => {
     setCurrentPage(page);
   };
 
@@ -79,7 +84,47 @@ const TableWithPagination = ({data, dataTotal}:any) => {
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
+
   
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [domainId, setDomainId] = useState(null);
+
+  const handleDeleteRecord = (domainId: any) => {
+    setDomainId(domainId);
+    
+    if(isModalOpen)
+      handleModalCancel();
+    else
+      setIsModalOpen(true)
+  };
+
+  const handleModalOk = async () => {
+    if (!domainId) return;
+    const headers = {
+      Authorization: `Bearer ${auth}`,
+    };
+  
+    if (auth) {
+      try {
+        const response = await axios.delete(backUrl+`/api/conso/${domainId}`, { headers });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    } else {
+      router.push(backUrl + "/api/auth/google/login");
+    }
+
+    setIsModalOpen(false);
+    setDomainId(null);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+    setDomainId(null);
+  };
+
   return (
     <>
       <PaginationContainer>
@@ -106,6 +151,15 @@ const TableWithPagination = ({data, dataTotal}:any) => {
           </PageButton>
         )}
       </PaginationContainer>
+
+
+      {isModalOpen && (
+        <PopupRecord>
+          <p>Are you sure you want to delete the record?</p>
+          <button onClick={handleModalOk}>OK</button>
+          <button onClick={handleModalCancel}>Cancel</button>
+        </PopupRecord>
+      )}
       <Table>
         <thead>
           <tr>
@@ -114,7 +168,11 @@ const TableWithPagination = ({data, dataTotal}:any) => {
                 padding: "0px 0px 0px 10%",
               }}
             >
-              Conso totale de tout les Domaine : <span> {dataTotal.totalCo2}  g de Co2</span>{" "}
+              Conso totale de tout les Domaine :{" "}
+              <span>
+                {" "}
+                {Math.floor(dataTotal.totalCo2 * 1000) / 1000} g de Co2
+              </span>{" "}
             </th>
             <th>
               <ButtonDelete>
@@ -125,7 +183,7 @@ const TableWithPagination = ({data, dataTotal}:any) => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item :any) => (
+          {items.map((item: any) => (
             <tr key={item.domain_id}>
               <td
                 style={{
@@ -140,12 +198,12 @@ const TableWithPagination = ({data, dataTotal}:any) => {
                   }}
                 >
                   {" "}
-                  {item.totalCo2} g de Co2
+                  {Math.floor(item.totalCo2 * 1000) / 1000} g de Co2
                 </span>{" "}
               </td>
               <td>
                 {" "}
-                <ButtonDelete>
+                <ButtonDelete onClick={()=>handleDeleteRecord(item.domain_id)}>
                   <span className="material-symbols-sharp">delete</span>{" "}
                 </ButtonDelete>
               </td>

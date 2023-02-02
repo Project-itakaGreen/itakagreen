@@ -51,6 +51,7 @@ export default function Details({ auth2Token }: any) {
     );
     requestApiData(backUrl + "/api/conso/total", auth2Token).then(
       (result) => {
+        console.log(result)
         setDataTotal(result);
       }
     );
@@ -213,6 +214,7 @@ export default function Details({ auth2Token }: any) {
           <TableWithPagination
             data= {dataTab}
             dataTotal = {dataTotal}
+            auth = {auth2Token}
         />
         </TabContaire>
       </SectionTab>
