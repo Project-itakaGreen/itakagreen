@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-Web_1920_5">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Web_1920_5" data-name="Web 1920 – 5" clip-path="url(#clip-Web_1920_5)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <path id="Tracé_48" data-name="Tracé 48" d="M754.97,1320.7s808.358-512.642,814.736-510.26,285.018-302.63,285.018-302.63L1975.255,405.4,2178.81,387.05l315.311-122.283,260.2,97.1L3054.757,211l337.149,210.892,245.553,299.165,575.776,789.125L3096.5,1703.39l-2403.6-303.1Z" transform="matrix(-0.996, 0.087, -0.087, -0.996, 3858.274, 749.747)" fill="#0a7c38"/>
+  </g>
+</svg>
