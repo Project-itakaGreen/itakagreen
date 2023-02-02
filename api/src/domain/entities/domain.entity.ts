@@ -11,6 +11,9 @@ export class Domain {
   @Column('double precision')
   co2PerGO: number;
 
+  @Column('bool')
+  renewable: boolean;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }

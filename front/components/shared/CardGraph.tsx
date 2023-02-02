@@ -2,7 +2,9 @@ import "chart.js/auto";
 import { Chart } from "react-chartjs-2";
 import styled from "styled-components";
 
-export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{return ""}}: any) {
+
+export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{return ""},children}: any) {
+
 
   const backgroundColor = [
     "rgba(230, 25, 75, 0.5)",
@@ -30,7 +32,7 @@ export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{
     labels: chartLabel,
     datasets: [
       {
-        label: "emission CO2 Kg",
+        label: "emission de CO2",
         data: chartData,
         backgroundColor: backgroundColor,
         borderColor: borderColor,
@@ -55,8 +57,8 @@ export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{
 
   return (
     <WrapperGraph>
-      <h3>It's my graph</h3>
-      <Chart type={type} data={data} options={options} height={650} width={800}/>
+      {children}
+      <Chart type={type} data={data} options={options} height={400} width={400}/>
     </WrapperGraph>
   );
 }
@@ -64,5 +66,14 @@ export default function CardGraph({ chartLabel, chartData, type, afterBody=()=>{
 const WrapperGraph = styled.div`
   width:300;
   height:300;
+  h3{
+    text-align: center;
+    color: #009245;
+  }
+  span{
+    color: green;
+    font-size: 1.5em;
+  }
 `;
+
 

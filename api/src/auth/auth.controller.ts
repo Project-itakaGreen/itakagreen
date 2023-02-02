@@ -1,18 +1,38 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Request,
+  Inject,
+  Response,
+} from '@nestjs/common';
 import { GoogleAuthGuard } from './utils/guards';
+import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-
-  @Get('google/login')
+  constructor(
+    private config: ConfigService,
+    @Inject('AUTH_SERVICE') private readonly authService: AuthService,
+  ) {}
   @UseGuards(GoogleAuthGuard)
+  @Get('google/login')
   handleLogin(): any {
     return { msg: 'Google Authentication' };
   }
 
-  @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  handleRedirect() {
-    return { msg: 'OK' }
+  @Get('google/callback')
+  async handleRedirect(@Request() req, @Response() res) {
+    const accessToken = await this.authService.login(req.user);
+    res.cookie('auth2', accessToken.access_token, {
+      maxAge: Number(accessToken.token_expire.slice(0, -1)) * 1000,
+      httpOnly: true,
+      domain: this.config.get('COOKIE_DOMAIN'),
+      path: '/',
+      sameSite: 'lax',
+    });
+    res.redirect(this.config.get('FRONT_URL'));
   }
 }
