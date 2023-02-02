@@ -8,9 +8,7 @@ export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
   @Post('domain')
-  create(
-    @Body() domainDto: DomainDto,
-  ) {
+  create(@Body() domainDto: DomainDto) {
     return this.domainService.getOrCreate(domainDto.domain);
   }
 }

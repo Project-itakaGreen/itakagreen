@@ -4,14 +4,12 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
