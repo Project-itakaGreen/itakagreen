@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { DomainService } from './../domain/domain.service';
 import { User } from './../user/entities/user.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
