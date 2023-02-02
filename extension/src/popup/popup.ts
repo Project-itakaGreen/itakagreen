@@ -40,14 +40,12 @@ chrome.cookies.get(
         }
       };
       xhr.send();
-      try {chrome.runtime.sendMessage({ message: "getDomain" }).then(()=>{
-        chrome.runtime.sendMessage({ message: "getPageConso" })
-      })} catch (e){}
-      
+      chrome.runtime.sendMessage({ message: "getDomain" }).then(() => {
+        chrome.runtime.sendMessage({ message: "getPageConso" });
+      }).catch(() => {});
     }
   }
 );
-
 
 chrome.runtime.onMessage.addListener(function (request) {
   if (request.message === "sendDomain") {
@@ -59,30 +57,24 @@ chrome.runtime.onMessage.addListener(function (request) {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "updatePageConso") {
     if (actualDomain) {
-      console.log("request.data",request.data);
+      console.log("request.data", request.data);
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        console.log("query",tabs)
+        console.log("query", tabs);
         const activeTabId = tabs[0].id;
         const activePageData = request.data.find(
           (saveTab: any) => saveTab.tabId === activeTabId
         );
-        console.log(activePageData);
-        const consoCo2 =
-          Math.floor(
-            ((activePageData.totalConsoBytes * actualDomain.co2PerGO) /
-              bytesToGO) *
-              100
-          ) / 100;
-        document.getElementById("conso-site-co2").innerText = String(consoCo2);
+        if (activePageData) {
+          const consoCo2 =
+            Math.floor(
+              ((activePageData.totalConsoBytes * actualDomain.co2PerGO) /
+                bytesToGO) *
+                100
+            ) / 100;
+          document.getElementById("conso-site-co2").innerText =
+            String(consoCo2);
+        }
       });
     }
-
-    // if (actualDomain) {
-    //   const updatePageConsoBytes = request.data.bytes || 0;
-    //   const consoCo2 = Math.floor(
-    //     ((updatePageConsoBytes * actualDomain.co2PerGO) / bytesToGO) * 100
-    //   ) / 100
-    //   document.getElementById("conso-site-co2").innerText = String(consoCo2);
-    // }
   }
 });

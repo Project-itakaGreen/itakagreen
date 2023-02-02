@@ -1,4 +1,4 @@
-import { getToken, isTokenValid } from './token';
+import { getToken, isTokenValid } from "./token";
 
 import type { RecordI } from "../interfaces/RecordI";
 export async function loadStatsSender(db: IDBDatabase) {

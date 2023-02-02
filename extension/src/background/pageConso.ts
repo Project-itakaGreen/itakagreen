@@ -4,11 +4,10 @@ const tabWatched: Array<any> = [];
  * Send to popup actual all request on page
  */
 function sendToPopup(message: string, data: any): void {
-  try {
-    chrome.runtime.sendMessage({ message, data });
-  } catch (Error) {}
+  chrome.runtime.sendMessage({ message: message, data: data }).catch((e) => {
+    //popup closed
+  });
 }
-
 
 export function watchTab(
   responseSize: number,
@@ -28,15 +27,15 @@ export function watchTab(
       tabId: details.tabId,
       domainName,
       totalConsoBytes: responseSize,
-    }
+    };
     tabWatched.push(workingTab);
   }
   sendToPopup("updatePageConso", tabWatched);
 }
 
 chrome.runtime.onMessage.addListener(async function (request) {
-  if (request.message === "getPageConso") {//getPageConso
-    console.log("coucou");
+  if (request.message === "getPageConso") {
+    //getPageConso
     sendToPopup("updatePageConso", tabWatched);
   }
 });

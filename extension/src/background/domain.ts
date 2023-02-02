@@ -10,11 +10,11 @@ export function loadInfoDomain(dbConnection: IDBDatabase): void {
   chrome.runtime.onMessage.addListener(async function (request) {
     if (request.message === "getDomain") {
       const response = await retrieveInfoDomain();
-      try {
-        chrome.runtime.sendMessage({ message: "sendDomain", value: response });
-      } catch (Error){
-    
-      }
+      chrome.runtime
+        .sendMessage({ message: "sendDomain", value: response })
+        .catch((e) => {
+          console.error("popup has been closed before get response");
+        });
     }
   });
 }
@@ -33,7 +33,7 @@ export async function retrieveInfoDomain(): Promise<DomainI | false> {
 /**
  * Get the domain of the open tab with the protocole
  */
-function getDomain(): Promise<string|false> {
+function getDomain(): Promise<string | false> {
   // get current tab
   const p = new Promise<string>((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

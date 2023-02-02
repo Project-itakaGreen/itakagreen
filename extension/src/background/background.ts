@@ -1,7 +1,7 @@
-import { dbConnection } from './dbConnection';
-import { loadInfoDomain } from './domain';
-import { saveNavigationData } from './saveNavigationData';
-import { loadStatsSender } from './statsSender';
+import { dbConnection } from "./dbConnection";
+import { loadInfoDomain } from "./domain";
+import { saveNavigationData } from "./saveNavigationData";
+import { loadStatsSender } from "./statsSender";
 
 let db: null | IDBDatabase;
 

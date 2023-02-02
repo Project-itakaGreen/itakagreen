@@ -22,6 +22,7 @@ export function saveNavigationData(dbConnection: IDBDatabase) {
       }
 
       let domainName = details.initiator || details.url;
+
       watchTab(responseSize, domainName, details);
       saveData(responseSize, currentInterval, domainName);
     },
@@ -48,8 +49,10 @@ async function saveData(
   const index = objectStore.index("key");
 
   const request = index.get([domainName, currentInterval]);
+
   request.onsuccess = function (event: Event) {
     const record = request.result;
+    console.log("record?", record);
     if (!record) {
       addRecord(objectStore, domainName, currentInterval, responseSize);
     } else {
@@ -72,7 +75,7 @@ function addRecord(
     timeInterval: timeInterval,
     bytes: size,
   };
- 
+
   const request = objectStore.add(record);
   request.onsuccess = function (event: Event) {
     console.log("record added");
