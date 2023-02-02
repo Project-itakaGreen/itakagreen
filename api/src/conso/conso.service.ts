@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Record } from 'src/record/entities/record.entity';
 import { User } from './../user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Sum } from 'utils/calcul-helper';
 
 @Injectable()
 export class ConsoService {
@@ -127,7 +128,7 @@ export class ConsoService {
       };
     });
     reformatLastWeek.forEach((element) => {
-      element['totalCo2'] = sum(element.domains, 'co2');
+      element['totalCo2'] = Sum(element.domains, 'co2');
     });
     return reformatLastWeek;
   }
@@ -135,28 +136,47 @@ export class ConsoService {
   getTimestampFromPeriod(period: number) {
     // partie qui récupere le timestamp de la date du jour - x jour
     const date = new Date();
-
     const day = date.getDate();
-
     const month = date.getMonth();
-
     const year = date.getFullYear();
-
     const today = new Date(year, month, day, 0, 0, 0);
-
     const todayTimestamp = today.getTime() / 1000;
-
     const todayMinusPeriod = todayTimestamp - 3600 * 24 * (period - 1);
-
     return todayMinusPeriod;
     // fin partie -- à sortir afin d'être utiliser et paramétrable
   }
-}
 
-function sum(obj: any, property: string) {
-  let sum = 0;
-  obj.forEach((element) => {
-    sum += element[property];
-  });
-  return sum;
+  async getAllConsoByUserId(user: User) {
+    return await this.recordRepository
+      .createQueryBuilder('record')
+      .select('MAX(record.timeInterval)', 'timeinterval')
+      .addSelect('domain.name', 'domain')
+      .addSelect('SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric','totalCo2')
+      .leftJoinAndSelect('record.domain', 'domain')
+      .where('record.userId = :userId', { userId: user.id })
+      .groupBy('domain.id')
+      .orderBy('timeinterval', 'DESC') 
+      .getRawMany();    
+  }
+
+  async deleteUserOnSpecificRecord(domainId: number, userId: number){
+    await this.recordRepository
+    .createQueryBuilder()
+    .update(Record)
+    .set({user: null})
+    .where("userId = :userId", {userId})
+    .andWhere("domainId = :domainId", {domainId})
+    .execute();
+    return `This action delete the association user #${userId} / domain #${domainId} from record `
+  }
+
+  async deleteUserConso(userId: number) {
+    await this.recordRepository
+    .createQueryBuilder()
+    .update(Record)
+    .set({user: null})
+    .where("userId = :userId", {userId})
+    .execute();
+    return `This action delete the user #${userId} from all record`
+  }
 }

@@ -1,11 +1,9 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ConsoService } from './conso.service';
 
 const DEFAULT_DAYS_PERIOD = 7;
-
 const DEFAULT_TOTAL_PERIOD = 1;
-
 const DEFAULT_DOMAIN_PERIOD = 1;
 
 @Controller('conso')
@@ -25,6 +23,14 @@ export class ConsoController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('domains')
+  getAllConsoByUserId(@Req() req) {
+    return this.consoService.getAllConsoByUserId(
+      req.user
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('domain/:period?')
   getDomain(@Param('period') period: number, @Req() req) {
     return this.consoService.getDomain(
@@ -40,5 +46,17 @@ export class ConsoController {
       req.user,
       period ?? DEFAULT_DAYS_PERIOD,
     );
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Patch('delete_domain/:id')
+  deleteUserOnSpecificRecord(@Param('id') domainId: number, @Req() req) {
+    return this.consoService.deleteUserOnSpecificRecord(domainId, +req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('delete')
+  deleteUserAllRecords(@Req() req) {
+    return this.consoService.deleteUserConso(+req.user.id);
   }
 }

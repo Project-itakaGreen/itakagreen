@@ -29,7 +29,6 @@ export async function getServerSideProps(context: { req: { headers: { cookie: st
     }
   }
   
-  console.log(auth2Token)
   return {
     props: {
       auth2Token: auth2Token || null
