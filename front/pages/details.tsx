@@ -15,6 +15,8 @@ export default function Details({ auth2Token }: any) {
   const [dataMonth, setDataMonth] = useState([]);
   const [dataDomain, setDataDomain] = useState([]);
   const [dataDomainMonth, setDataDomainMonth] = useState([]);
+  const [dataTab, setDataTab] = useState([]);
+  const [dataTotal, setDataTotal]= useState([]);
 
   useEffect(() => {
     requestApiData(backUrl + "/api/conso/domain/1", auth2Token).then(
@@ -42,9 +44,19 @@ export default function Details({ auth2Token }: any) {
         setDataDomainMonth(result);
       }
     );
+    requestApiData(backUrl + "/api/conso/domains", auth2Token).then(
+      (result) => {
+        setDataTab(result);
+      }
+    );
+    requestApiData(backUrl + "/api/conso/total", auth2Token).then(
+      (result) => {
+        setDataTotal(result);
+      }
+    );
   }, [auth2Token, backUrl]);
 
-  if (!dataDay || !dataWeek || !dataMonth || !dataDomain || !dataDomainMonth) {
+  if (!dataDay || !dataWeek || !dataMonth || !dataDomain || !dataDomainMonth || !dataTab || !dataTotal ) {
     return <div>Loading...</div>;
   }
 
@@ -59,6 +71,7 @@ export default function Details({ auth2Token }: any) {
 
   const chartDomainLabel = dataDomain.map((e: { domain: any }) => e.domain);
   const chartDomainData = dataDomain.map((e: { co2: any }) => e.co2);
+
 
   const chartDomainMonthLabel = dataDomainMonth.map(
     (e: { domain: any }) => e.domain
@@ -165,6 +178,8 @@ export default function Details({ auth2Token }: any) {
             </CardGraph>
           </ContainerGraph>
         </ContainerGraphGlobal>
+        </SectionGraphique>
+        <SectionGraphique>
         <ContainerGraphGlobal>
           <ContainerGraph>
             <CardGraph
@@ -190,11 +205,15 @@ export default function Details({ auth2Token }: any) {
               </h3>
             </CardGraph>
           </ContainerGraph>
-        </ContainerGraphGlobal>
-      </SectionGraphique>
+          </ContainerGraphGlobal>
+          </SectionGraphique>
+      
       <SectionTab>
         <TabContaire>
-          <TableWithPagination />
+          <TableWithPagination
+            data= {dataTab}
+            dataTotal = {dataTotal}
+        />
         </TabContaire>
       </SectionTab>
     </>
@@ -282,6 +301,15 @@ const ContainerGraphGlobal = styled.div`
   width: 100%;
   height: 100vh;
 `;
+
+const ContainerGraphGlobal2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;
+`;
+
 
 const ContainerGraph = styled.div`
   display: flex;

@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const data = [
-  { id: 1, name: "www.youtube.fr" },
-  { id: 2, name: "www.pornhub.fr" },
-  { id: 3, name: "www.pornhub.fr" },
-  { id: 4, name: "www.pornhub.fr" },
-  { id: 5, name: "www.pornhub.fr" },
-  { id: 6, name: "www.pornhub.fr" },
-  { id: 7, name: "www.pornhub.fr" },
-  { id: 8, name: "www.pornhub.fr" },
-  { id: 9, name: "www.pornhub.fr" },
-];
 
 const Table = styled.table`
   width: 100%;
@@ -77,7 +66,8 @@ const ButtonDelete = styled.button`
   }
 `;
 
-const TableWithPagination = () => {
+const TableWithPagination = ({data, dataTotal}:any) => {
+
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
 
@@ -89,7 +79,7 @@ const TableWithPagination = () => {
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
   );
-
+  
   return (
     <>
       <PaginationContainer>
@@ -124,7 +114,7 @@ const TableWithPagination = () => {
                 padding: "0px 0px 0px 10%",
               }}
             >
-              Conso totale de tout les Domaine : <span> 1333Co2</span>{" "}
+              Conso totale de tout les Domaine : <span> {dataTotal.totalCo2}  g de Co2</span>{" "}
             </th>
             <th>
               <ButtonDelete>
@@ -135,22 +125,22 @@ const TableWithPagination = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
+          {items.map((item :any) => (
+            <tr key={item.domain_id}>
               <td
                 style={{
                   width: "90%",
                   padding: "0px 0px 0px 10%",
                 }}
               >
-                Conso sur le Domaine {item.name} :
+                Conso sur le Domaine {item.domain} :
                 <span
                   style={{
                     padding: "0px 0px 0px 10%",
                   }}
                 >
                   {" "}
-                  1333Co2
+                  {item.totalCo2} g de Co2
                 </span>{" "}
               </td>
               <td>
