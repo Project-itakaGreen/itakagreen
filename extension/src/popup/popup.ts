@@ -5,7 +5,7 @@ const loginButton = document.getElementById("google-login-button");
 loginButton.addEventListener("click", handleLogin);
 function handleLogin() {
   console.log("login");
-  window.open("http://localhost:8080/api/auth/google/login", "_blank");
+  window.open(process.env.API_URL + "/auth/google/login", "_blank");
 }
 
 chrome.runtime.sendMessage({ message: "domain" });

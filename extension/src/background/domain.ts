@@ -109,7 +109,7 @@ async function setDomainInDB(
 async function fetchDomainInfos(domain: string): Promise<DomainI | false> {
   // fetch domain infos
   console.log("fetch domain infos");
-  return await fetch(`http://localhost:8080/api/domain/`, {
+  return await fetch(process.env.API_URL + `/domain/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

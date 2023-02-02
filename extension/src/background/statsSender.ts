@@ -19,7 +19,7 @@ export async function loadStatsSender(db: IDBDatabase) {
 async function sendStats(db: IDBDatabase, token: string) {
   const records = (await getAllRecords(db)) as RecordI[];
 
-  const urlSendpoint = "http://localhost:8080/api/record/many/";
+  const urlSendpoint = process.env.API_URL + "/record/many/";
   fetch(urlSendpoint, {
     method: "POST",
     headers: {
