@@ -16,37 +16,33 @@ export default function Details({ auth2Token }: any) {
   const [dataDomain, setDataDomain] = useState([]);
   const [dataDomainMonth, setDataDomainMonth] = useState([]);
 
-
-  useEffect(() => { 
-    requestApiData(backUrl+"/api/conso/domain/1", auth2Token).then(
+  useEffect(() => {
+    requestApiData(backUrl + "/api/conso/domain/1", auth2Token).then(
       (result) => {
         setDataDay(result);
       }
     );
-    requestApiData(
-      backUrl+"/api/conso/dayDetail",
-      auth2Token
-    ).then((result) => {
-      setDataWeek(result);
-    });
-    requestApiData(
-      backUrl+"/api/conso/dayDetail/30",
-      auth2Token
-    ).then((result) => {
-      setDataMonth(result);
-    });
-    requestApiData(backUrl+"/api/conso/domain/7", auth2Token).then(
+    requestApiData(backUrl + "/api/conso/dayDetail", auth2Token).then(
+      (result) => {
+        setDataWeek(result);
+      }
+    );
+    requestApiData(backUrl + "/api/conso/dayDetail/30", auth2Token).then(
+      (result) => {
+        setDataMonth(result);
+      }
+    );
+    requestApiData(backUrl + "/api/conso/domain/7", auth2Token).then(
       (result) => {
         setDataDomain(result);
       }
     );
-    requestApiData(
-      backUrl+"/api/conso/domain/30",
-      auth2Token
-    ).then((result) => {
-      setDataDomainMonth(result);
-    });
-  }, [auth2Token,backUrl]);
+    requestApiData(backUrl + "/api/conso/domain/30", auth2Token).then(
+      (result) => {
+        setDataDomainMonth(result);
+      }
+    );
+  }, [auth2Token, backUrl]);
 
   if (!dataDay || !dataWeek || !dataMonth || !dataDomain || !dataDomainMonth) {
     return <div>Loading...</div>;
@@ -134,64 +130,66 @@ export default function Details({ auth2Token }: any) {
         <h1> Suivez votre impact numérique en détails </h1>
         <ContainerGraphGlobal>
           <ContainerGraph>
-           <CardGraph
-            chartLabel={chartDayLabel}
-            chartData={chartDayData}
-            type={arrayType[0]}
-          >
-            <h3>
-            Votre consomation <span>aujourd&apos;hui</span>
-            </h3>
-          </CardGraph>
+            <CardGraph
+              chartLabel={chartDayLabel}
+              chartData={chartDayData}
+              type={arrayType[0]}
+            >
+              <h3>
+                Votre consomation <span>aujourd&apos;hui</span>
+              </h3>
+            </CardGraph>
           </ContainerGraph>
           <ContainerGraph>
             <CardGraph
-            chartLabel={chartWeekLabel}
-            chartData={chartWeekData}
-            type={arrayType[0]}
-            afterBody={afterBodyWeek}
-          >
-            <h3>
-            Votre consomation des <span> 7 derniers jours</span>
-            </h3>
-          </CardGraph>
+              chartLabel={chartWeekLabel}
+              chartData={chartWeekData}
+              type={arrayType[0]}
+              afterBody={afterBodyWeek}
+            >
+              <h3>
+                Votre consomation des <span> 7 derniers jours</span>
+              </h3>
+            </CardGraph>
           </ContainerGraph>
           <ContainerGraph>
-             <CardGraph
-            chartLabel={chartMonthLabel}
-            chartData={chartMonthData}
-            type={arrayType[3]}
-            afterBody={afterBodyMonth}
-          >
-            <h3>
-            Votre consomation des <span> 30 derniers jours</span>
-            </h3>
-          </CardGraph>
+            <CardGraph
+              chartLabel={chartMonthLabel}
+              chartData={chartMonthData}
+              type={arrayType[3]}
+              afterBody={afterBodyMonth}
+            >
+              <h3>
+                Votre consomation des <span> 30 derniers jours</span>
+              </h3>
+            </CardGraph>
           </ContainerGraph>
         </ContainerGraphGlobal>
         <ContainerGraphGlobal>
-        <ContainerGraph>
-          <CardGraph
-            chartLabel={chartDomainLabel}
-            chartData={chartDomainData}
-            type={arrayType[0]}
-          >
-            <h3>
-            Votre consomation par domaines des <span> 7 derniers jours</span>
-            </h3>
-          </CardGraph>
-        </ContainerGraph>
-         <ContainerGraph>
-          <CardGraph
-            chartLabel={chartDomainMonthLabel}
-            chartData={chartDomainMonthData}
-            type={arrayType[3]}
-          >
-            <h3>
-            Votre consomation par domaines des <span> 30 derniers jours</span>
-            </h3>
-          </CardGraph>
-        </ContainerGraph>
+          <ContainerGraph>
+            <CardGraph
+              chartLabel={chartDomainLabel}
+              chartData={chartDomainData}
+              type={arrayType[0]}
+            >
+              <h3>
+                Votre consomation par domaines des{" "}
+                <span> 7 derniers jours</span>
+              </h3>
+            </CardGraph>
+          </ContainerGraph>
+          <ContainerGraph>
+            <CardGraph
+              chartLabel={chartDomainMonthLabel}
+              chartData={chartDomainMonthData}
+              type={arrayType[3]}
+            >
+              <h3>
+                Votre consomation par domaines des{" "}
+                <span> 30 derniers jours</span>
+              </h3>
+            </CardGraph>
+          </ContainerGraph>
         </ContainerGraphGlobal>
       </SectionGraphique>
       <SectionTab>
@@ -199,11 +197,9 @@ export default function Details({ auth2Token }: any) {
           <TableWithPagination />
         </TabContaire>
       </SectionTab>
-
     </>
   );
 }
-
 
 async function requestApiData(url: any, token: any) {
   const backUrl = process.env.BACK_URL;
@@ -211,8 +207,7 @@ async function requestApiData(url: any, token: any) {
     Authorization: `Bearer ${token}`,
   };
 
-  if(token)
-  {
+  if (token) {
     try {
       const response = await axios.get(url, { headers });
       return response.data;
@@ -220,12 +215,9 @@ async function requestApiData(url: any, token: any) {
       console.error(error);
       throw error;
     }
+  } else {
+    router.push(backUrl + "/api/auth/google/login");
   }
-  else
-  {
-    router.push(backUrl+"/api/auth/google/login")
-  }
-  
 }
 
 export async function getServerSideProps(context: {
@@ -256,7 +248,7 @@ const SectionTab = styled.div`
   background-size: cover;
   width: 100%;
   height: 100vh;
-
+`;
 
 const SectionGraphique = styled.div`
   background-image: url("./images/bgs1.svg");

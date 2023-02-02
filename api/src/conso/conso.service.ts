@@ -151,32 +151,41 @@ export class ConsoService {
       .createQueryBuilder('record')
       .select('MAX(record.timeInterval)', 'timeinterval')
       .addSelect('domain.name', 'domain')
-      .addSelect('SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric','totalCo2')
+      .addSelect(
+        'SUM(record.bytes * domain.co2PerGO / 1073741824)::numeric',
+        'totalCo2',
+      )
       .leftJoinAndSelect('record.domain', 'domain')
       .where('record.userId = :userId', { userId: user.id })
       .groupBy('domain.id')
-      .orderBy('timeinterval', 'DESC') 
-      .getRawMany();    
+      .orderBy('timeinterval', 'DESC')
+      .getRawMany();
   }
 
-  async deleteUserOnSpecificRecord(domainId: number, userId: number){
+  async deleteUserOnSpecificRecord(domainId: number, userId: number) {
     await this.recordRepository
-    .createQueryBuilder()
-    .update(Record)
-    .set({user: null})
-    .where("userId = :userId", {userId})
-    .andWhere("domainId = :domainId", {domainId})
-    .execute();
-    return {status: `200`, msg: `This action delete the association user #${userId} / domain #${domainId} from record`};
+      .createQueryBuilder()
+      .update(Record)
+      .set({ user: null })
+      .where('userId = :userId', { userId })
+      .andWhere('domainId = :domainId', { domainId })
+      .execute();
+    return {
+      status: `200`,
+      msg: `This action delete the association user #${userId} / domain #${domainId} from record`,
+    };
   }
 
   async deleteUserConso(userId: number) {
     await this.recordRepository
-    .createQueryBuilder()
-    .update(Record)
-    .set({user: null})
-    .where("userId = :userId", {userId})
-    .execute();
-    return {status: `200`, msg:`This action delete the user #${userId} from all record`}
+      .createQueryBuilder()
+      .update(Record)
+      .set({ user: null })
+      .where('userId = :userId', { userId })
+      .execute();
+    return {
+      status: `200`,
+      msg: `This action delete the user #${userId} from all record`,
+    };
   }
 }
