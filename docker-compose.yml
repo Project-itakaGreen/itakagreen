@@ -53,8 +53,7 @@ services:
     volumes:
       - ./front:/opt/app
       - ./front/node_modules:/opt/app/node_modules
-    environment:
-      - NODE_ENV=development
+      - front-build:/opt/app/.next
     networks:
       - app-network
 
@@ -84,3 +83,4 @@ networks:
   app-network:
 volumes:
   pgadmin-data:
+  front-build:

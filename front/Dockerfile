@@ -3,6 +3,7 @@
 FROM node:14 AS development
 WORKDIR /opt/app
 
+ENV NODE_ENV=development
 COPY package*.json ./
 RUN npm install
 

@@ -10,7 +10,7 @@ const nextConfig = {
     return config;
   },
   env: {
-    BACK_URL: process.env.BACK_URL
+    BACK_URL: process.env.BACK_URL,
   }
 }
 
