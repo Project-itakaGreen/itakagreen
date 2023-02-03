@@ -1,6 +1,7 @@
-
+import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+
 
 const Footer = () => {
   return (
@@ -17,7 +18,7 @@ const Footer = () => {
     }}>
       <p>Copyright © {new Date().getFullYear()} itakagreen</p>
       <Confidentiality>
-        <a href="/confidentiality">Politiques de confidentialité</a>
+        <Link href="/confidentiality">Politiques de confidentialité</Link>
       </Confidentiality>
     </footer>
   );

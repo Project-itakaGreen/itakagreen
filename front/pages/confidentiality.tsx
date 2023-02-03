@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Layouts from "../components/layouts"
+
+import Layouts from '../components/layouts';
 
 export default function Confidentiality({auth2Token}:any) {
   return (
@@ -9,13 +10,13 @@ export default function Confidentiality({auth2Token}:any) {
       <Container>
         <p>
         Politiques de confidentialité pour les utilisateurs de notre extension de navigateur web:<br/>
-        Collecte de données: Nous collectons uniquement les informations nécessaires pour offrir une expérience personnalisée à nos utilisateurs. Les données personnelles que nous collectons incluent l'adresse e-mail et l'identifiant Google de l'utilisateur.<br/>
+        Collecte de données: Nous collectons uniquement les informations nécessaires pour offrir une expérience personnalisée à nos utilisateurs. Les données personnelles que nous collectons incluent l&apos;adresse e-mail et l&apos;identifiant Google de l&apos;utilisateur.<br/>
         Utilisation des données: Les informations collectées sont utilisées uniquement pour améliorer les fonctionnalités et la qualité de notre extension de navigateur. Nous ne partagerons ni ne vendrons jamais vos informations à des tiers.<br/><br/>
         Sécurité des données: Nous prenons la sécurité de vos données très au sérieux et avons mis en place des mesures de sécurité appropriées pour les protéger. Nous utilisons également des protocoles de cryptage pour garantir la confidentialité de vos informations.<br/><br/>
-        Stockage des données: Nous stockons vos informations sur des serveurs sécurisés en dehors de votre pays d'origine, mais sous réserve des lois applicables sur la protection des données.<br/><br/>
+        Stockage des données: Nous stockons vos informations sur des serveurs sécurisés en dehors de votre pays d&apos;origine, mais sous réserve des lois applicables sur la protection des données.<br/><br/>
         Modifications des politiques de confidentialité: Nous nous réservons le droit de modifier ces politiques de confidentialité en tout temps, avec ou sans préavis. Les modifications apportées entreront en vigueur immédiatement après leur publication sur notre site web.<br/><br/>
-        Accès et contrôle des données: Vous pouvez accéder à vos informations à tout moment en utilisant la page détail de l'extension. Vous pourrez également y mettre à jour ou supprimer vos informations.<br/><br/>
-        Nous respectons votre vie privée et nous engageons à protéger vos informations personnelles en utilisant les meilleures pratiques de l'industrie. Si vous avez des questions sur nos politiques de confidentialité, n'hésitez pas à nous contacter.         
+        Accès et contrôle des données: Vous pouvez accéder à vos informations à tout moment en utilisant la page détail de l&apos;extension. Vous pourrez également y mettre à jour ou supprimer vos informations.<br/><br/>
+        Nous respectons votre vie privée et nous engageons à protéger vos informations personnelles en utilisant les meilleures pratiques de l&apos;industrie. Si vous avez des questions sur nos politiques de confidentialité, n&apos;hésitez pas à nous contacter.         
         </p>
       </Container>
     </Layouts>
