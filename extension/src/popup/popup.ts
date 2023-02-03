@@ -15,15 +15,20 @@ if (loginButton) {
 }
 
 function handleDomain(domain: DomainI | false) {
+  const renewableSpan = document.getElementById("renewable-span");
   if (domain === false) {
     console.log("domain invalid"); // ex: chrome pages
     actualDomain = null;
     return;
   } else if (domain.renewable === true) {
     console.log("this domain use renewable energie");
+    renewableSpan.innerText = "renouvelable";
   } else {
     console.log("this domain use non renewable energie");
+    renewableSpan.innerText ="non renouvelable"
   }
+  document.getElementById("renewable").innerText = "Ce site utilise de l'énergie ";
+  
   actualDomain = domain;
 }
 
@@ -56,7 +61,7 @@ async function fetchTotalCo2(token: string): Promise<any> {
 chrome.cookies.get(
   { url: process.env.FRONT_URL, name: "auth2" },
   async function (cookie) {
-    const token = cookie.value;
+    const token = cookie?.value;
     if (token) {
       // Load Connected Popup
       const xhr = new XMLHttpRequest();
@@ -87,7 +92,7 @@ chrome.cookies.get(
 
 chrome.runtime.onMessage.addListener(function (request) {
   if (request.message === "sendDomain") {
-    handleDomain(request.value);
+    handleDomain(request?.value);
   }
 });
 
