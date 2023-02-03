@@ -4,6 +4,7 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import router from "next/router";
+import DeleteUser from "../components/shared/DeleteUser";
 
 export default function Details({ auth2Token }: any) {
   const KEEP_VALUES = 10;
@@ -51,7 +52,6 @@ export default function Details({ auth2Token }: any) {
     );
     requestApiData(backUrl + "/api/conso/total", auth2Token).then(
       (result) => {
-        console.log(result)
         setDataTotal(result);
       }
     );
@@ -150,7 +150,7 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[0]}
             >
               <h3>
-                Votre consomation <span>aujourd&apos;hui</span>
+                Votre consommation <span>aujourd&apos;hui</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
@@ -162,7 +162,7 @@ export default function Details({ auth2Token }: any) {
               afterBody={afterBodyWeek}
             >
               <h3>
-                Votre consomation des <span> 7 derniers jours</span>
+                Votre consommation des <span> 7 derniers jours</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
@@ -174,7 +174,7 @@ export default function Details({ auth2Token }: any) {
               afterBody={afterBodyMonth}
             >
               <h3>
-                Votre consomation des <span> 30 derniers jours</span>
+                Votre consommation des <span> 30 derniers jours</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
@@ -189,7 +189,7 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[0]}
             >
               <h3>
-                Votre consomation par domaines des{" "}
+                Votre consommation par domaines des{" "}
                 <span> 7 derniers jours</span>
               </h3>
             </CardGraph>
@@ -201,7 +201,7 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[3]}
             >
               <h3>
-                Votre consomation par domaines des{" "}
+                Votre consommation par domaines des{" "}
                 <span> 30 derniers jours</span>
               </h3>
             </CardGraph>
@@ -218,6 +218,12 @@ export default function Details({ auth2Token }: any) {
         />
         </TabContaire>
       </SectionTab>
+      <SectionDeleteUser>
+        <DeleteUser
+        auth = {auth2Token}
+        />
+      </SectionDeleteUser>
+
     </>
   );
 }
@@ -259,6 +265,7 @@ export async function getServerSideProps(context: {
   return {
     props: {
       auth2Token: auth2Token || null,
+      
     },
   };
 }
@@ -312,6 +319,13 @@ const ContainerGraphGlobal2 = styled.div`
   height: 10vh;
 `;
 
+const SectionDeleteUser = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;   
+`
 
 const ContainerGraph = styled.div`
   display: flex;
