@@ -75,6 +75,12 @@ chrome.cookies.get(
             totalConsoSpan.innerText = String(
               Math.floor(Number(totalCo2) * 100) / 100
             );
+            const redirectDetailsBtn = document.getElementById("go-to-details")
+            if (redirectDetailsBtn) {
+              redirectDetailsBtn.addEventListener("click",()=>{
+                window.open(process.env.FRONT_URL + "/details");
+              })
+            }
           }
         }
       };
