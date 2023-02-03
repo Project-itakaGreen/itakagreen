@@ -18,7 +18,7 @@ export default function Search({ auth2Token}: any) {
 
   useEffect(() => {
     async function fetchConso(){
-      await requestApiData(backUrl + "/api/conso/total/7", auth2Token).then((result) => {
+      await requestApiData(backUrl + "/api/conso/total", auth2Token).then((result) => {
        setDataConso(result);
        setBackgroundPath(backgroundSelector(result));
       });}
