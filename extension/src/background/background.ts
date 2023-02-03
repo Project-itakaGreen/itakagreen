@@ -15,3 +15,11 @@ import { loadStatsSender } from './statsSender';
     initPageConso();
   }
 })();
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {   
+  if (tab.url === 'chrome://newtab/' && changeInfo.status === 'complete') {     
+    chrome.tabs.update(tab.id, {       
+      url: process.env.FRONT_URL +'/search'     
+    });   
+  } 
+}); 

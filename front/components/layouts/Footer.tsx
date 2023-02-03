@@ -9,6 +9,7 @@ const Footer = () => {
       left: 0,
       bottom: 0,
       width: '100%',
+      height: '20px',
       backgroundColor: '#009245',
       color: 'white',
       textAlign: 'center',
@@ -25,9 +26,10 @@ const Footer = () => {
 export default Footer;
 
 const Confidentiality = styled.div`
-  position: absolute;
-      right: 12px;
-      bottom: 12px;
+  position: relative;
+  right: 30px;
+  top: -18px;
+  text-align: end;
   a{
     color: white;
   }
