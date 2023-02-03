@@ -14,6 +14,7 @@ const HeaderContainer = styled.header`
   z-index: 1;
   position: fixed;
 `;
+
 const Logo = styled.img`
   margin-right: 25%;
 `;
@@ -36,7 +37,7 @@ const HeaderLink = styled.a`
     border: 2px solid white;
     transform: scale(0);
     transition: all 0.3s ease-in-out 0s;
-    border-radius: 50% 40% 10% 50%;
+    border-radius: 3% 20% 0% 50%;
   }
 
   &:hover:after {
@@ -51,7 +52,7 @@ const Header: React.FC<Props> = () => {
       <nav>
         <HeaderLink href="/">Accueil</HeaderLink>
         <HeaderLink href="/details">Détails</HeaderLink>
-        <HeaderLink href="#">Contact</HeaderLink>
+        <HeaderLink href="/infos">À propos</HeaderLink>
       </nav>
     </HeaderContainer>
   );

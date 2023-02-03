@@ -1,19 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import Layouts from '../components/layouts';
 
 export default function Home({auth2Token}:any) {
   return (
-    <Container>
-      <LeftContainer>
-        <h1> Optez pour une empreinte <br /> numérique responsable <br /> avec Itakagreen</h1>
-        <button>
-          <a href="#">Installer l&apos;extension</a>
-        </button>
-
-      </LeftContainer>
-      <RightContainer>
-      </RightContainer>
-    </Container>
+    <Layouts>
+      <Container>
+        <LeftContainer>
+          <h1> Contrôlez votre empreinte <br /> carbone numérique  <br /> avec Itakagreen</h1>
+          <button>
+            <a href="#">Installer l&apos;extension</a>
+          </button>
+        </LeftContainer>
+        <RightContainer>
+        </RightContainer>
+      </Container>
+    </Layouts>
   )
 };
 
@@ -82,7 +84,7 @@ const LeftContainer = styled.div`
 const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 96vh;
   background-image: url(./images/backgoundhome.svg);
   background-repeat: no-repeat;
   background-size: cover;

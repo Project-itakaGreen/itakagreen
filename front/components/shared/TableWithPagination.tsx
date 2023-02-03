@@ -204,7 +204,7 @@ const TableWithPagination = ({ data, dataTotal, auth }: any) => {
                 padding: "0px 0px 0px 10%",
               }}
             >
-              Conso totale de tout les domaines :{" "}
+              Conso totale de tous les domaines :{" "}
               <span>
                 {" "}
                 {Math.floor(dataTotal.totalCo2 * 1000) / 1000} g de Co2
