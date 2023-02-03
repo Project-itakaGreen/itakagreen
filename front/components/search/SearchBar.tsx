@@ -55,7 +55,9 @@ export default function SearchBar() {
     <WrapperSearch>
       <form action={selectedSearchEngine.search} method="get">
         <input type="text" name="q" required />
-        <input type="submit" value="Search" />
+        <button type="submit">
+          <i className="material-symbols-sharp">search </i>
+        </button>
       </form>
       <SearchEngine>
         <select
@@ -76,18 +78,45 @@ export default function SearchBar() {
 }
 
 const WrapperSearch = styled.div`
+  form {
+    display: flex;
+  }
+  select {
+    border: unset;
+    height: 30.5px;
+    border-radius: 76px;
+    background-color: #ffffff95;
+    width: 120%;
+    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+    padding-left: 5px;
+    cursor: pointer;
+  }
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
   margin: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
   input {
     height: 30px;
   }
   input[type="text"] {
+    padding: 0 50px 0 10px;
+    border-radius: 76px;
     width: 500px;
+    border: unset;
+    background-color: #ffffff95;
   }
-  input[type="submit"] {
-    width: 100px;
+  button[type="submit"] {
+    border-style: none;
+    background-color: unset;
+    margin-left: -40px;
+    cursor: pointer;
+    i {    
+      margin-top: 3px;
+      margin-left: 5px;
+    }
   }
 `;
+
 const SearchEngine = styled.div``;

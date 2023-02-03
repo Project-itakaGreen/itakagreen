@@ -2,9 +2,10 @@ import CardGraph from "../components/shared/CardGraph";
 import TableWithPagination from "../components/shared/TableWithPagination";
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import router from "next/router";
 import DeleteUser from "../components/shared/DeleteUser";
+import { requestApiData } from "../utils/queryHelper";
+import Layouts from "../components/layouts";
+
 
 export default function Details({ auth2Token }: any) {
   const KEEP_VALUES = 10;
@@ -140,6 +141,7 @@ export default function Details({ auth2Token }: any) {
 
   return (
     <>
+    <Layouts>
       <SectionGraphique>
         <h1> Suivez votre impact numérique en détails </h1>
         <ContainerGraphGlobal>
@@ -224,27 +226,9 @@ export default function Details({ auth2Token }: any) {
         />
       </SectionDeleteUser>
 
+      </Layouts>
     </>
   );
-}
-
-async function requestApiData(url: any, token: any) {
-  const backUrl = process.env.BACK_URL;
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  if (token) {
-    try {
-      const response = await axios.get(url, { headers });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  } else {
-    router.push(backUrl + "/api/auth/google/login");
-  }
 }
 
 export async function getServerSideProps(context: {
@@ -261,7 +245,6 @@ export async function getServerSideProps(context: {
     }
   }
 
-  console.log(auth2Token);
   return {
     props: {
       auth2Token: auth2Token || null,
@@ -271,7 +254,7 @@ export async function getServerSideProps(context: {
 }
 
 const SectionTab = styled.div`
-  background-image: url("./images/bgs2.svg");
+  background-image: url("./images/bgdh.svg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -279,7 +262,7 @@ const SectionTab = styled.div`
 `;
 
 const SectionGraphique = styled.div`
-  background-image: url("./images/bgs1.svg");
+  background-image: url("./images/bgd.svg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
