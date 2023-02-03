@@ -53,6 +53,7 @@ services:
       - 3000:3000
     volumes:
       - ./front:/opt/app
+      - ./front/node_modules:/opt/app/node_modules
     environment:
       - NODE_ENV=development
     networks:
