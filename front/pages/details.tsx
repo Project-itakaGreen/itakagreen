@@ -182,7 +182,7 @@ export default function Details({ auth2Token }: any) {
           </ContainerGraph>
         </ContainerGraphGlobal>
         </SectionGraphique>
-        <SectionGraphique>
+        <SectionGraphique2>
         <ContainerGraphGlobal>
           <ContainerGraph>
             <CardGraph
@@ -209,7 +209,7 @@ export default function Details({ auth2Token }: any) {
             </CardGraph>
           </ContainerGraph>
           </ContainerGraphGlobal>
-          </SectionGraphique>
+          </SectionGraphique2>
       
       <SectionTab>
         <TabContaire>
@@ -220,12 +220,12 @@ export default function Details({ auth2Token }: any) {
         />
         </TabContaire>
       </SectionTab>
+
       <SectionDeleteUser>
         <DeleteUser
         auth = {auth2Token}
         />
       </SectionDeleteUser>
-
       </Layouts>
     </>
   );
@@ -254,15 +254,18 @@ export async function getServerSideProps(context: {
 }
 
 const SectionTab = styled.div`
-  background-image: url("./images/bgdh.svg");
+  background-image: url("./images/section3.svg");
   background-repeat: no-repeat;
   background-size: cover;
+  display : flex;
+  align-items: center;
+  
   width: 100%;
   height: 100vh;
 `;
 
 const SectionGraphique = styled.div`
-  background-image: url("./images/bgd.svg");
+  background-image: url("./images/section1.svg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -275,6 +278,13 @@ const SectionGraphique = styled.div`
     padding-bottom: 70px;
   }
 `;
+const SectionGraphique2 = styled.div`
+  background-image: url("./images/section2.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+`;
 
 const TabContaire = styled.div`
   width: 70%;
@@ -284,6 +294,10 @@ const TabContaire = styled.div`
   background-color: #e8fceb;
   border: 1px solid green;
   border-radius: 10px 10px 0px 0px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -50%;
 `;
 
 const ContainerGraphGlobal = styled.div`
@@ -300,6 +314,7 @@ const ContainerGraphGlobal2 = styled.div`
   justify-content: center;
   width: 100%;
   height: 10vh;
+
 `;
 
 const SectionDeleteUser = styled.div`
@@ -307,8 +322,9 @@ const SectionDeleteUser = styled.div`
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  height: 10vh;   
-`
+  height: 100px;
+  margin-bottom: 20%;
+`;
 
 const ContainerGraph = styled.div`
   display: flex;
