@@ -24,13 +24,6 @@ export default function DeleteUser({auth}:any) {
         setIsModalOpen(true)
     };
 
-    useEffect(() => {
-      const cookies = Cookies.get("auth2")
-      console.log(cookies);
-
-      setDeletedCookie(false);
-  }, [deletedCookie])
-
     const handleModalOk = async () => {
       if (!userId) return;
       const headers = {
