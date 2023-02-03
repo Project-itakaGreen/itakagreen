@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "webpack",
     "watch": "webpack --watch",
     "dev": "webpack --watch"
   },
@@ -15,6 +15,7 @@
     "@types/dotenv-webpack": "^7.0.3",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",

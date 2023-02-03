@@ -1,10 +1,13 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+require('dotenv').config()
 
 module.exports = () => {
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV)
   const env = process.env.NODE_ENV || 'development'
   console.log(`build as ${env} mode`)
+
   return {
     mode: env,
     devtool: "source-map",
@@ -29,7 +32,9 @@ module.exports = () => {
       path: path.resolve(__dirname, './dist')
     },
     plugins: [
-      new Dotenv(),
+      new Dotenv({
+        systemvars: true
+      }),
       new CopyWebpackPlugin({
         patterns: [{
           from: './public',
