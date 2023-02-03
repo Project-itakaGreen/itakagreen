@@ -31,7 +31,6 @@ services:
       context: ./api
       dockerfile: Dockerfile
       target: ${NODE_ENV}
-    command: npm run start:dev
     env_file: ./api/.env
     volumes:
       - ./api:/usr/src/app
@@ -43,11 +42,11 @@ services:
       - "8080:8080"
     depends_on:
       - database
-  front-dev:
+  front:
     build:
       context: ./front
-      dockerfile: Dockerfile.dev
-    command: npm run dev
+      dockerfile: Dockerfile
+      target: ${NODE_ENV}
     env_file: ./front/.env
     ports:
       - 3000:3000

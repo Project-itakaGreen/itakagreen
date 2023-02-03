@@ -1,3 +1,16 @@
+## dev
+
+FROM node:14 AS development
+WORKDIR /opt/app
+
+COPY package*.json ./
+RUN npm install
+
+COPY ./ ./
+
+CMD ["npm", "run", "dev"]
+
+## prod
 
 FROM node:lts-alpine AS deps
 WORKDIR /opt/app
@@ -16,8 +29,7 @@ RUN npm run build
 ###
 FROM deps AS production
 WORKDIR /opt/app
-EXPOSE 8000
-ENV PORT=8000
+
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 USER node
