@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import Layouts from '../components/layouts';
 
 export default function Infos() {
@@ -7,10 +8,10 @@ export default function Infos() {
     <Layouts>
       <Container>
         <LeftContainer>
-          <p> Notre extension de navigateur web révolutionnaire permet à ses utilisateurs de connaître l'impact environnemental de leur navigation sur Internet. Conçue pour calculer l'empreinte carbone en CO2 de chaque site visité, elle offre une vision transparente des conséquences écologiques de nos actions en ligne. <br/><br/>
-              En utilisant des algorithmes avancés, notre extension est capable de mesurer la consommation énergétique nécessaire pour charger les sites web et d'afficher cette information sous forme de données faciles à comprendre. De plus, elle permet aux utilisateurs de suivre leur propre consommation énergétique au fil du temps, leur permettant de prendre des mesures concrètes pour réduire leur impact sur l'environnement.<br/><br/>
-              Notre extension est conçue pour être simple à utiliser, sans configuration complexe ni utilisation excessive des données personnelles. Elle s'intègre parfaitement à votre navigateur web existant et est disponible pour toutes les plateformes, y compris Windows, Mac et Linux.<br/><br/>
-              En utilisant notre extension, vous contribuez à la création d'un futur plus durable en réduisant votre empreinte carbone et en encourageant les entreprises à adopter des pratiques plus respectueuses de l'environnement. Rejoignez la communauté de nos utilisateurs satisfaits et découvrez comment la navigation sur Internet peut être plus verte aujourd'hui.</p>
+          <p> Notre extension de navigateur web révolutionnaire permet à ses utilisateurs de connaître l&apos;impact environnemental de leur navigation sur Internet. Conçue pour calculer l&apos;empreinte carbone en CO2 de chaque site visité, elle offre une vision transparente des conséquences écologiques de nos actions en ligne. <br/><br/>
+              En utilisant des algorithmes avancés, notre extension est capable de mesurer la consommation énergétique nécessaire pour charger les sites web et d&apos;afficher cette information sous forme de données faciles à comprendre. De plus, elle permet aux utilisateurs de suivre leur propre consommation énergétique au fil du temps, leur permettant de prendre des mesures concrètes pour réduire leur impact sur l&apos;environnement.<br/><br/>
+              Notre extension est conçue pour être simple à utiliser, sans configuration complexe ni utilisation excessive des données personnelles. Elle s&apos;intègre parfaitement à votre navigateur web existant et est disponible pour toutes les plateformes, y compris Windows, Mac et Linux.<br/><br/>
+              En utilisant notre extension, vous contribuez à la création d&apos;un futur plus durable en réduisant votre empreinte carbone et en encourageant les entreprises à adopter des pratiques plus respectueuses de l&apos;environnement. Rejoignez la communauté de nos utilisateurs satisfaits et découvrez comment la navigation sur Internet peut être plus verte aujourd&apos;hui.</p>
           <button>
             <a href="mailto:a.de-cillia@it-students.fr">Contactez nous</a>
           </button>
