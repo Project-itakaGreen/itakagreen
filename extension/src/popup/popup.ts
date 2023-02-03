@@ -21,14 +21,17 @@ function handleDomain(domain: DomainI | false) {
     actualDomain = null;
     return;
   } else if (domain.renewable === true) {
-    console.log("this domain use renewable energie");
-    renewableSpan.innerText = "renouvelable";
-  } else {
-    console.log("this domain use non renewable energie");
-    renewableSpan.innerText ="non renouvelable"
-  }
-  document.getElementById("renewable").innerText = "Ce site utilise de l'énergie ";
+    //console.log("this domain use renewable energie");
+    if (renewableSpan) {
+      renewableSpan.innerText = "renouvelable";
+    }
   
+  } else {
+    //console.log("this domain use non renewable energie");
+    if (renewableSpan) {
+      renewableSpan.innerText = "non renouvelable";
+    }
+  }
   actualDomain = domain;
 }
 
@@ -106,6 +109,7 @@ chrome.runtime.onMessage.addListener(function (request) {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "updatePageConso") {
     if (actualDomain) {
+      console.log(actualDomain)
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const activeTabId = tabs[0].id;
         const activePageData = request.data.find(
