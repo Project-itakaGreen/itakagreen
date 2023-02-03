@@ -4,6 +4,7 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import router from "next/router";
+import DeleteUser from "../components/shared/DeleteUser";
 
 export default function Details({ auth2Token }: any) {
   const KEEP_VALUES = 10;
@@ -15,6 +16,8 @@ export default function Details({ auth2Token }: any) {
   const [dataMonth, setDataMonth] = useState([]);
   const [dataDomain, setDataDomain] = useState([]);
   const [dataDomainMonth, setDataDomainMonth] = useState([]);
+  const [dataTab, setDataTab] = useState([]);
+  const [dataTotal, setDataTotal]= useState([]);
 
   useEffect(() => {
     requestApiData(backUrl + "/api/conso/domain/1", auth2Token).then(
@@ -42,9 +45,19 @@ export default function Details({ auth2Token }: any) {
         setDataDomainMonth(result);
       }
     );
+    requestApiData(backUrl + "/api/conso/domains", auth2Token).then(
+      (result) => {
+        setDataTab(result);
+      }
+    );
+    requestApiData(backUrl + "/api/conso/total", auth2Token).then(
+      (result) => {
+        setDataTotal(result);
+      }
+    );
   }, [auth2Token, backUrl]);
 
-  if (!dataDay || !dataWeek || !dataMonth || !dataDomain || !dataDomainMonth) {
+  if (!dataDay || !dataWeek || !dataMonth || !dataDomain || !dataDomainMonth || !dataTab || !dataTotal ) {
     return <div>Loading...</div>;
   }
 
@@ -59,6 +72,7 @@ export default function Details({ auth2Token }: any) {
 
   const chartDomainLabel = dataDomain.map((e: { domain: any }) => e.domain);
   const chartDomainData = dataDomain.map((e: { co2: any }) => e.co2);
+
 
   const chartDomainMonthLabel = dataDomainMonth.map(
     (e: { domain: any }) => e.domain
@@ -136,7 +150,7 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[0]}
             >
               <h3>
-                Votre consomation <span>aujourd&apos;hui</span>
+                Votre consommation <span>aujourd&apos;hui</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
@@ -148,7 +162,7 @@ export default function Details({ auth2Token }: any) {
               afterBody={afterBodyWeek}
             >
               <h3>
-                Votre consomation des <span> 7 derniers jours</span>
+                Votre consommation des <span> 7 derniers jours</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
@@ -160,11 +174,13 @@ export default function Details({ auth2Token }: any) {
               afterBody={afterBodyMonth}
             >
               <h3>
-                Votre consomation des <span> 30 derniers jours</span>
+                Votre consommation des <span> 30 derniers jours</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
         </ContainerGraphGlobal>
+        </SectionGraphique>
+        <SectionGraphique>
         <ContainerGraphGlobal>
           <ContainerGraph>
             <CardGraph
@@ -173,7 +189,7 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[0]}
             >
               <h3>
-                Votre consomation par domaines des{" "}
+                Votre consommation par domaines des{" "}
                 <span> 7 derniers jours</span>
               </h3>
             </CardGraph>
@@ -185,18 +201,29 @@ export default function Details({ auth2Token }: any) {
               type={arrayType[3]}
             >
               <h3>
-                Votre consomation par domaines des{" "}
+                Votre consommation par domaines des{" "}
                 <span> 30 derniers jours</span>
               </h3>
             </CardGraph>
           </ContainerGraph>
-        </ContainerGraphGlobal>
-      </SectionGraphique>
+          </ContainerGraphGlobal>
+          </SectionGraphique>
+      
       <SectionTab>
         <TabContaire>
-          <TableWithPagination />
+          <TableWithPagination
+            data= {dataTab}
+            dataTotal = {dataTotal}
+            auth = {auth2Token}
+        />
         </TabContaire>
       </SectionTab>
+      <SectionDeleteUser>
+        <DeleteUser
+        auth = {auth2Token}
+        />
+      </SectionDeleteUser>
+
     </>
   );
 }
@@ -238,6 +265,7 @@ export async function getServerSideProps(context: {
   return {
     props: {
       auth2Token: auth2Token || null,
+      
     },
   };
 }
@@ -282,6 +310,22 @@ const ContainerGraphGlobal = styled.div`
   width: 100%;
   height: 100vh;
 `;
+
+const ContainerGraphGlobal2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;
+`;
+
+const SectionDeleteUser = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;   
+`
 
 const ContainerGraph = styled.div`
   display: flex;

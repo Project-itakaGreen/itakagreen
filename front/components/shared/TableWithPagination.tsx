@@ -1,17 +1,7 @@
+import axios from "axios";
+import router from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
-
-const data = [
-  { id: 1, name: "www.youtube.fr" },
-  { id: 2, name: "www.pornhub.fr" },
-  { id: 3, name: "www.pornhub.fr" },
-  { id: 4, name: "www.pornhub.fr" },
-  { id: 5, name: "www.pornhub.fr" },
-  { id: 6, name: "www.pornhub.fr" },
-  { id: 7, name: "www.pornhub.fr" },
-  { id: 8, name: "www.pornhub.fr" },
-  { id: 9, name: "www.pornhub.fr" },
-];
 
 const Table = styled.table`
   width: 100%;
@@ -77,11 +67,50 @@ const ButtonDelete = styled.button`
   }
 `;
 
-const TableWithPagination = () => {
+const PopupRecord = styled.div`
+    position: fixed;
+    top: 10vh;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+    z-index: 2;
+    left: calc(50% - 150px);
+    p{
+      font-size: 1.3em;
+      text-align: center;
+    }
+
+    button{
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: #f46e6e;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: solid 1px #f46e6e;
+      background-color: transparent;
+      &:hover {
+        border-radius: 3% 20% 0% 50%;
+        color: white;
+        border: solid 1px #f46e6e;
+        background-color: #f46e6e;
+      }
+    }
+`;
+
+
+const TableWithPagination = ({ data, dataTotal, auth }: any) => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
+  const backUrl = process.env.BACK_URL;
 
-  const handlePageClick = (page :any) => {
+  const handlePageClick = (page: any) => {
     setCurrentPage(page);
   };
 
@@ -90,8 +119,58 @@ const TableWithPagination = () => {
     (currentPage + 1) * itemsPerPage
   );
 
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [domainId, setDomainId] = useState(null);
+  const [route, setDeleteRoute] = useState(null);
+
+  const handleDeleteRecord = (domainId: any, route: any ) => {
+    setDomainId(domainId);
+    setDeleteRoute(route);
+    
+    if(isModalOpen)
+      handleModalCancel();
+    else
+      setIsModalOpen(true)
+  };
+
+  const handleModalOk = async () => {
+    if (!domainId) return;
+    const headers = {
+      Authorization: `Bearer ${auth}`,
+    };
+  
+    if (auth) {
+      try {
+        const response = await axios.delete(backUrl+`${route}`, { headers });
+        location.reload();
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    } else {
+      router.push(backUrl + "/api/auth/google/login");
+    }
+
+    setIsModalOpen(false);
+    setDomainId(null);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+    setDomainId(null);
+  };
+
   return (
     <>
+  {isModalOpen && (
+          <PopupRecord>
+            <p>Voulez-vous vraiment supprimer cet enregistrement ?</p>
+            <button onClick={handleModalOk}>OK</button>
+            <button onClick={handleModalCancel}>Annuler</button>
+          </PopupRecord>
+        )}
+
       <PaginationContainer>
         {currentPage > 0 && (
           <PageButton onClick={() => handlePageClick(currentPage - 1)}>
@@ -116,6 +195,7 @@ const TableWithPagination = () => {
           </PageButton>
         )}
       </PaginationContainer>
+
       <Table>
         <thead>
           <tr>
@@ -124,10 +204,14 @@ const TableWithPagination = () => {
                 padding: "0px 0px 0px 10%",
               }}
             >
-              Conso totale de tout les Domaine : <span> 1333Co2</span>{" "}
+              Conso totale de tout les domaines :{" "}
+              <span>
+                {" "}
+                {Math.floor(dataTotal.totalCo2 * 1000) / 1000} g de Co2
+              </span>{" "}
             </th>
             <th>
-              <ButtonDelete>
+              <ButtonDelete onClick={()=>handleDeleteRecord(auth,`/api/conso/delete`)}>
                 {" "}
                 <span className="material-symbols-sharp">delete</span>
               </ButtonDelete>
@@ -135,27 +219,27 @@ const TableWithPagination = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
+          {items.map((item: any) => (
+            <tr key={item.domain_id}>
               <td
                 style={{
                   width: "90%",
                   padding: "0px 0px 0px 10%",
                 }}
               >
-                Conso sur le Domaine {item.name} :
+                Conso sur le domaine {item.domain} :
                 <span
                   style={{
                     padding: "0px 0px 0px 10%",
                   }}
                 >
                   {" "}
-                  1333Co2
+                  {Math.floor(item.totalCo2 * 1000) / 1000} g de Co2
                 </span>{" "}
               </td>
               <td>
                 {" "}
-                <ButtonDelete>
+                <ButtonDelete onClick={()=>handleDeleteRecord(item.domain_id,`/api/conso/`+item.domain_id)}>
                   <span className="material-symbols-sharp">delete</span>{" "}
                 </ButtonDelete>
               </td>

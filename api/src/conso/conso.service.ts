@@ -26,7 +26,6 @@ export class ConsoService {
       )
       .leftJoin('record.domain', 'domain')
       .where('record.userId = :userId', { userId: user.id })
-      .andWhere('record.timeInterval > :parameter', { parameter: timestamp })
       .groupBy('record.userId')
       .getRawOne();
     return total ?? { userId: user.id, totalCo2: '0' };

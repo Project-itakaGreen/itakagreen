@@ -11,6 +11,7 @@ const nextConfig = {
   },
   env: {
     BACK_URL: process.env.BACK_URL,
+    FRONT_URL: process.env.FRONT_URL
   }
 }
 
