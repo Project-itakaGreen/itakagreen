@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "ae192d54-e4df-45e3-96a6-56c522dbab61",
+		"name": "api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15161321"
+	},
+	"item": [
+		{
+			"name": "conso",
+			"item": [
+				{
+					"name": "day",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/conso/day/25",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"conso",
+								"day",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "domain",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/conso/domain/25",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"conso",
+								"domain",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "total",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/conso/total/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"conso",
+								"total",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stats",
+			"item": [
+				{
+					"name": "domain",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/stats/domain",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"stats",
+								"domain"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "hourStat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/stats/hourStat",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"stats",
+								"hourStat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "weekStats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/stats/weekStat",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"stats",
+								"weekStat"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/google/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"google",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test auth /api",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}",
+							"host": [
+								"{{BASE_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "record",
+			"item": [
+				{
+					"name": "localhost:8080/record/single",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domainName\": \"https://alibaba.com/\",\n    \"bytes\": 50,\n    \"timeInterval\": 1672863539\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/record/single/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"record",
+								"single",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/record/many",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"domainName\": \"https://alibaba.com/\",\n        \"bytes\": 1,\n        \"timeInterval\": 1672863539\n    },\n    {\n        \"domainName\": \"https://youtube.com/\",\n        \"bytes\": 225,\n        \"timeInterval\": 1672900000\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/record/many/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"record",
+								"many",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "domain",
+			"item": [
+				{
+					"name": "get domain",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain\": \"https://www.youtube.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/domain/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"domain",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN_AUTH}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOKEN_AUTH",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		}
+	]
+}
