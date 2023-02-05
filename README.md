@@ -72,6 +72,8 @@ A full Postman_collection Json is provided in the ```./ressource```
 # Design
 We created all the assets in the project, that include illustration, logo and branding.
 To do so we used the student licence of adobe XD and illustrator.
+https://xd.adobe.com/view/45913c4b-fae2-43bb-ac25-d4f33968cbd9-10c2/
+
 All the media are in svg format for optimisation.
 ![](./ressource/Preview.png)
 
