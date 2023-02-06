@@ -4,8 +4,8 @@ let actualDomain: any = null;
 const bytesToGO = 1_073_741_824;
 let totalCo2 = 0;
 // ---------------- POPUP INTERACT ---------------- //
-// Google connection
 
+// Google connection
 const loginButton = document.getElementById("google-login-button");
 
 if (loginButton) {
