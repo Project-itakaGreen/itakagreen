@@ -7,12 +7,12 @@ services:
     restart: always
     networks:
       - webnet
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
+    env_file: ./database/.env
     volumes:
-      - ./database/local_pgdatabase:/var/lib/postgresql/data
+      - itakagreen-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
   adminer:
     container_name: adminer
     image: adminer
@@ -20,11 +20,12 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - ./database/local_pgdatabase:/var/lib/postgresql/data
+      - itakagreen-db:/var/lib/postgresql/data
     depends_on:
       - database
     networks:
       - webnet
+      
   api:
     container_name: api
     build:
@@ -34,7 +35,6 @@ services:
     env_file: ./api/.env
     volumes:
       - ./api:/usr/src/app
-      - ./api/node_modules:/usr/src/app/node_modules
     networks:
       - webnet
       - app-network
@@ -42,7 +42,9 @@ services:
       - "8080:8080"
     depends_on:
       - database
+      
   front:
+    container_name: front
     build:
       context: ./front
       dockerfile: Dockerfile
@@ -52,35 +54,11 @@ services:
       - 3000:3000
     volumes:
       - ./front:/opt/app
-      - ./front/node_modules:/opt/app/node_modules
-      - front-build:/opt/app/.next
     networks:
       - app-network
-
-
-  #   api:
-  # hostname: api
-  # build:
-  #   context: ./api
-  #   dockerfile: Dockerfile
-  #   target: development
-  # command: npm run start:dev
-  # env_file: ./api/.env
-  # restart: always
-  # volumes:
-  #   - ./api:/usr/src/api
-  #   - ./api/node_modules:/usr/src/api/node_modules
-  # networks:
-  #   - webnet
-  # ports:
-  #   - 8080:8080
-  # depends_on:
-  #   - database
-
 
 networks:
   webnet:
   app-network:
 volumes:
-  pgadmin-data:
-  front-build:
+  itakagreen-db:
