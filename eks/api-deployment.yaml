@@ -119,14 +119,12 @@ spec:
                   key: clientSecret
                   name: api--env
           image: supergike/itakagreen-api:latest
+          workingDir: /usr/src/app
           name: api
           ports:
             - containerPort: 8080
           resources: {}
           imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: /usr/src/app
-              name: api-claim0
       restartPolicy: Always
       volumes:
         - name: api-claim0
