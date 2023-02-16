@@ -23,8 +23,11 @@ WORKDIR /opt/app
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 RUN npm install -g next
-COPY --from=builder /opt/app/node_modules ./
-COPY --from=builder /opt/app/next.config.js ./
-COPY --from=builder /opt/app/public ./
+COPY --from=builder /opt/app/node_modules ./node_modules
+COPY --from=builder /opt/app/public ./public
 COPY --from=builder /opt/app/.next ./.next
+
+COPY --from=builder /opt/app/next.config.js ./
+COPY --from=builder /opt/app/package*.json ./
+
 CMD ["npm", "run", "start"]

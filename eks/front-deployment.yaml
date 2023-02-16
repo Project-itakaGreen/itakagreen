@@ -42,9 +42,7 @@ spec:
           ports:
             - containerPort: 3000
           resources: {}
-          volumeMounts:
-            - mountPath: /opt/app
-              name: front-claim0
+          workingDir: /opt/app
           imagePullPolicy: Always
       restartPolicy: Always
       volumes:
